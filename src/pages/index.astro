@@ -353,10 +353,11 @@ const quickLinks = [
   .quick-card:hover .q-arrow { transform: translateX(4px); }
 
   @media (max-width: 900px) {
-    .stats-grid { grid-template-columns: repeat(2, 1fr); }
-    .news-grid { grid-template-columns: 1fr; }
-    .gallery-preview { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 96px; }
-    .quick-grid { grid-template-columns: 1fr 1fr; }
+    .apbdes-summary { grid-template-columns: 1fr; }
+    .apbdes-tables { grid-template-columns: 1fr; }
+    .apbdes-table td, .apbdes-table th { padding: 10px 14px; }
+    .apbdes-panel { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .apbdes-table { min-width: 480px; }
   }
   @media (max-width: 560px) {
     .hero-in { padding-block: 96px 100px; }
