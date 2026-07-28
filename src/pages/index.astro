@@ -1,0 +1,572 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Illustration from '../components/Illustration.astro';
+import Icon from '../components/Icon.astro';
+import StatCounter from '../components/StatCounter.astro';
+import NewsCard from '../components/NewsCard.astro';
+import KonturDivider from '../components/KonturDivider.astro';
+import { getCollection } from 'astro:content';
+
+const berita = (await getCollection('berita', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+
+const galeri = (await getCollection('galeri')).slice(0, 6);
+
+const quickLinks = [
+  { href: '/profil/', label: 'Profil Desa', desc: 'Sejarah, visi misi & potensi', icon: 'landmark' as const },
+  { href: '/lokasi/', label: 'Lokasi', desc: 'Peta & akses menuju desa', icon: 'pin' as const },
+  { href: '/kondisi-desa/', label: 'Kondisi Desa', desc: 'Batas wilayah & demografi', icon: 'map' as const },
+  { href: '/pemerintahan/', label: 'Pemerintahan', desc: 'Struktur & perangkat desa', icon: 'building' as const },
+  { href: '/berita/', label: 'Berita', desc: 'Kabar & pengumuman terbaru', icon: 'calendar' as const },
+  { href: '/galeri/', label: 'Galeri', desc: 'Dokumentasi foto & video', icon: 'image' as const },
+];
+---
+<BaseLayout title="Desa Marabau">
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg" aria-hidden="true">
+      <img src="/images/background.jpg" alt="" />
+    </div>
+    <div class="container hero-in">
+      <p class="eyebrow" data-reveal>Kec. Pariaman Selatan &middot; Kota Pariaman &middot; Sumatera Barat</p>
+      <h1 data-reveal>Selamat Datang di<br/>Desa Marabau</h1>
+      <p class="hero-lead" data-reveal>
+        Desa Nan Hijau di Kota Pariaman — merawat tradisi gotong royong,
+        pertanian, dan pelayanan warga yang terbuka bagi semua.
+      </p>
+      <div class="hero-cta" data-reveal>
+        <a href="/profil/" class="btn btn-primary">Jelajahi Desa <Icon name="arrow-right" size={16} /></a>
+        <a href="/lokasi/" class="btn btn-outline">Lihat Lokasi</a>
+      </div>
+    </div>
+  </section>
+    <KonturDivider tone="cream" />
+
+    <!-- SAMBUTAN KEPALA DESA -->
+  <section class="section sambutan-section">
+    <div class="container sambutan-layout">
+      <div class="sambutan-photo" data-reveal>
+             <img src="/images/kepala-desa.png" alt="Ardison Arbi, Kepala Desa Marabau" />
+      </div>
+      <div class="sambutan-text" data-reveal>
+        <p class="eyebrow">Sambutan</p>
+        <h2>Sambutan Kepala Desa</h2>
+        <p class="nama">Ardison Arbi</p>
+        <p class="jabatan">Kepala Desa Marabau</p>
+        <p class="isi">
+          Assalamualaikum warahmatullahi wabarakatuh. Selamat datang di website resmi Desa Marabau,
+          Kecamatan Pariaman Selatan, Kota Pariaman. Website ini kami bangun untuk mempermudah
+          penyampaian informasi kegiatan, pembangunan, dan pelayanan pemerintah desa kepada seluruh
+          warga, sekaligus sebagai wujud keterbukaan informasi publik yang menjadi komitmen kami
+          bersama perangkat desa.
+        </p>
+        <p class="isi">
+          Melalui website ini, warga dapat mengakses profil desa, data kependudukan, struktur
+          pemerintahan, berita dan pengumuman terbaru, hingga dokumentasi kegiatan secara lebih
+          mudah dan cepat, kapan pun dan di mana pun. Kami berharap kehadiran website ini dapat
+          mempererat komunikasi antara pemerintah desa dan masyarakat, serta mendorong partisipasi
+          aktif warga dalam pembangunan Desa Marabau ke depan.
+        </p>
+        <p class="isi">Terima kasih atas kunjungan dan dukungan Bapak/Ibu sekalian.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- RINGKASAN STATISTIK -->
+  <section class="section stats-section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Selayang Pandang</p>
+        <h2>Desa Marabau dalam Angka</h2>
+        <p>Data ringkas kondisi wilayah dan kependudukan Desa Marabau.</p>
+      </div>
+      <div class="stats-grid" data-reveal-group>
+        <StatCounter icon="users" value={1158} label="Jumlah Penduduk (jiwa)" note="Berdasarkan data tahun 2023" />
+        <StatCounter icon="map" value={0.81} suffix=" km²" decimals={2} label="Luas Wilayah" />
+        <StatCounter icon="flag" value={3} label="Jumlah Dusun" />
+      </div>
+    </div>
+  </section>
+
+  <!-- APBDES -->
+  <section class="section apbdes-section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Transparansi Anggaran</p>
+        <h2>APBDes Desa Marabau Tahun Anggaran 2026</h2>
+        <p>Ringkasan Anggaran Pendapatan dan Belanja Desa (APBDes) sebagaimana dipublikasikan pada papan informasi desa.</p>
+      </div>
+
+      <div class="apbdes-summary" data-reveal-group>
+        <div class="apbdes-stat" data-reveal>
+          <span class="apbdes-label">Jumlah Pendapatan Transfer</span>
+          <span class="apbdes-value">Rp 912.758.744,94</span>
+        </div>
+        <div class="apbdes-stat" data-reveal>
+          <span class="apbdes-label">Jumlah Belanja Desa</span>
+          <span class="apbdes-value">Rp 947.239.825,00</span>
+        </div>
+        <div class="apbdes-stat apbdes-highlight" data-reveal>
+          <span class="apbdes-label">Surplus / Defisit</span>
+          <span class="apbdes-value">(Rp 34.481.080,00)</span>
+        </div>
+      </div>
+
+      <div class="apbdes-tables">
+        <div class="apbdes-panel" data-reveal>
+          <div class="apbdes-panel-head">Pendapatan Desa</div>
+          <table class="apbdes-table">
+            <thead><tr><th>Uraian</th><th>Jumlah</th></tr></thead>
+            <tbody>
+              <tr><td>Jumlah Pendapatan Asli Desa</td><td>Rp 0,00</td></tr>
+              <tr><td>Pendapatan Transfer</td><td>Rp 912.758.744,94</td></tr>
+              <tr><td>Alokasi Dana Desa</td><td>Rp 0,00</td></tr>
+              <tr><td>Bagi Hasil Pajak dan Retribusi</td><td>Rp 0,00</td></tr>
+              <tr class="apbdes-subtotal"><td>Jumlah Pendapatan Transfer</td><td>Rp 912.758.744,94</td></tr>
+              <tr class="apbdes-total"><td>Jumlah Pendapatan Desa</td><td>Rp 912.758.744,94</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="apbdes-panel" data-reveal>
+          <div class="apbdes-panel-head">Pembiayaan</div>
+          <table class="apbdes-table">
+            <thead><tr><th>Uraian</th><th>Jumlah</th></tr></thead>
+            <tbody>
+              <tr><td>Penerimaan Pembiayaan</td><td>Rp 49.481.080,00</td></tr>
+              <tr><td>Pengeluaran Pembiayaan</td><td>Rp 15.000.000,00</td></tr>
+              <tr class="apbdes-subtotal"><td>Pembiayaan Netto</td><td>Rp 34.481.080,00</td></tr>
+              <tr class="apbdes-total"><td>Sisa Lebih Pembiayaan Anggaran (SiLPA)</td><td>Rp 0,00</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="apbdes-panel apbdes-panel-wide" data-reveal>
+        <div class="apbdes-panel-head">Belanja Desa per Bidang</div>
+        <table class="apbdes-table">
+          <thead><tr><th>Bidang / Sub Bidang</th><th>Jumlah</th></tr></thead>
+          <tbody>
+            <tr class="apbdes-bidang"><td colspan="2">1. Bidang Penyelenggaraan Pemerintahan Desa</td></tr>
+            <tr><td class="apbdes-sub">Siltap, tunjangan &amp; operasional pemerintahan desa</td><td>Rp 417.668.739,69</td></tr>
+            <tr><td class="apbdes-sub">Sarana &amp; prasarana pemerintahan desa</td><td>Rp 126.997.000,00</td></tr>
+            <tr><td class="apbdes-sub">Administrasi kependudukan, pencatatan sipil &amp; kearsipan</td><td>Rp 1.800.000,00</td></tr>
+            <tr><td class="apbdes-sub">Tata praja pemerintahan, perencanaan keuangan &amp; pelaporan</td><td>Rp 16.100.000,00</td></tr>
+            <tr><td class="apbdes-sub">Pertanahan</td><td>Rp 2.340.000,00</td></tr>
+            <tr class="apbdes-subtotal"><td>Subtotal Bidang 1</td><td>Rp 564.905.739,69</td></tr>
+
+            <tr class="apbdes-bidang"><td colspan="2">2. Bidang Pelaksanaan Pembangunan Desa</td></tr>
+            <tr><td class="apbdes-sub">Pendidikan</td><td>Rp 76.600.000,00</td></tr>
+            <tr><td class="apbdes-sub">Kesehatan</td><td>Rp 74.522.108,00</td></tr>
+            <tr><td class="apbdes-sub">Kawasan permukiman</td><td>Rp 16.604.000,00</td></tr>
+            <tr><td class="apbdes-sub">Kehutanan &amp; lingkungan hidup</td><td>Rp 38.048.800,00</td></tr>
+            <tr><td class="apbdes-sub">Perhubungan, komunikasi &amp; informatika</td><td>Rp 4.000.000,00</td></tr>
+            <tr><td class="apbdes-sub">Energi &amp; sumberdaya mineral</td><td>Rp 17.500.000,00</td></tr>
+            <tr class="apbdes-subtotal"><td>Subtotal Bidang 2</td><td>Rp 227.274.908,00</td></tr>
+
+            <tr class="apbdes-bidang"><td colspan="2">3. Bidang Pembinaan Kemasyarakatan Desa</td></tr>
+            <tr><td class="apbdes-sub">Kebudayaan &amp; keagamaan</td><td>Rp 37.425.000,00</td></tr>
+            <tr><td class="apbdes-sub">Kepemudaan &amp; olahraga</td><td>Rp 2.000.000,00</td></tr>
+            <tr><td class="apbdes-sub">Kelembagaan masyarakat</td><td>Rp 8.000.000,00</td></tr>
+            <tr class="apbdes-subtotal"><td>Subtotal Bidang 3</td><td>Rp 47.425.000,00</td></tr>
+
+            <tr class="apbdes-bidang"><td colspan="2">4. Bidang Pemberdayaan Masyarakat</td></tr>
+            <tr><td class="apbdes-sub">Pertanian &amp; peternakan</td><td>Rp 35.959.667,00</td></tr>
+            <tr><td class="apbdes-sub">Pemberdayaan perempuan, perlindungan anak &amp; keluarga</td><td>Rp 19.874.510,00</td></tr>
+            <tr class="apbdes-subtotal"><td>Subtotal Bidang 4</td><td>Rp 55.834.177,94</td></tr>
+
+            <tr class="apbdes-bidang"><td colspan="2">5. Bidang Penanggulangan Bencana, Darurat &amp; Mendesak</td></tr>
+            <tr><td class="apbdes-sub">Penanggulangan bencana</td><td>Rp 13.000.000,00</td></tr>
+            <tr><td class="apbdes-sub">Keadaan darurat</td><td>Rp 10.000.000,00</td></tr>
+            <tr><td class="apbdes-sub">Keadaan mendesak</td><td>Rp 28.800.000,00</td></tr>
+            <tr class="apbdes-subtotal"><td>Subtotal Bidang 5</td><td>Rp 51.800.000,00</td></tr>
+
+            <tr class="apbdes-grand-total"><td>Jumlah Belanja Desa</td><td>Rp 947.239.825,00</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="apbdes-note">Sumber: papan informasi APBDes Desa Marabau Tahun Anggaran 2026. Perbarui data ini setiap tahun anggaran berjalan.</p>
+    </div>
+  </section>
+
+  <!-- BERITA TERBARU -->
+  <section class="section news-section">
+    <div class="container">
+      <div class="section-head between">
+        <div>
+          <p class="eyebrow">Kabar Desa</p>
+          <h2>Berita &amp; Pengumuman Terbaru</h2>
+        </div>
+        <a href="/berita/" class="btn btn-line">Semua Berita</a>
+      </div>
+      <div class="news-grid" data-reveal-group>
+       {berita.map((post) => (
+          <NewsCard
+            slug={post.id}
+            title={post.data.title}
+            date={post.data.date}
+            kategori={post.data.kategori}
+            ringkasan={post.data.ringkasan}
+            gambar={post.data.gambar}
+            fotoUtama={post.data.fotoUtama}
+          />
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- PETA LOKASI DESA -->
+  <section class="section lokasi-section">
+    <div class="container">
+      <div class="section-head center">
+        <h2>Menuju Desa Marabau</h2>
+        <span class="head-line"></span>
+        <p>Temukan rute perjalanan menuju Kantor Desa Marabau dengan mudah.</p>
+      </div>
+      <div class="lokasi-card">
+        <div class="lokasi-info">
+          <h3>Mari Berkunjung!</h3>
+          <p>Desa Marabau berlokasi strategis di Kecamatan Pariaman Selatan, Kota Pariaman, dekat dengan pusat kota namun tetap asri dan tenang.</p>
+          <div class="lokasi-point">
+            <Icon name="pin" size={18} />
+            <div>
+              <strong>Alamat Lengkap</strong>
+              <p>Jl. Kompi Bakipeh, Marabau, Kec. Pariaman Selatan, Kota Pariaman, Sumatera Barat</p>
+            </div>
+          </div>
+          <div class="lokasi-point">
+            <Icon name="flag" size={18} />
+            <div>
+              <strong>Jarak &amp; Waktu Tempuh</strong>
+              <p>Sekitar 3,5 km dari pusat Kota Pariaman (± 12 menit menggunakan kendaraan bermotor).</p>
+            </div>
+          </div>
+          <a class="btn btn-primary" href="/lokasi/">Lihat Detail Lokasi <Icon name="arrow-right" size={16} /></a>
+        </div>
+        <div class="lokasi-map">
+          <iframe
+            title="Peta lokasi Kantor Desa Marabau"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            src="https://www.google.com/maps?q=Kantor+Desa+Marabau,+Jl.+Kompi+Bakipeh,+Pariaman+Selatan,+Kota+Pariaman&output=embed"
+          ></iframe>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <KonturDivider tone="forest" flip />
+  <!-- GALERI PREVIEW -->
+  <section class="section gallery-section">
+    <div class="container">
+      <div class="section-head between light">
+        <div>
+          <p class="eyebrow">Dokumentasi</p>
+          <h2>Sekilas Galeri Desa</h2>
+        </div>
+        <a href="/galeri/" class="btn btn-outline">Lihat Galeri</a>
+      </div>
+      <div class="gallery-preview" data-reveal-group>
+        {galeri.map((item, i) => (
+          <a href="/galeri/" class={`g-item g-item-${(i % 6) + 1}`} data-reveal>
+            <Illustration variant={item.data.gambar as any || 'sawah'} title={item.data.judul} />
+            <span class="g-caption">{item.data.judul}</span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+  <KonturDivider tone="forest" />
+
+  <!-- QUICK LINKS -->
+  <section class="section quick-section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Akses Cepat</p>
+        <h2>Jelajahi Semua Informasi Desa</h2>
+      </div>
+      <div class="quick-grid" data-reveal-group>
+        {quickLinks.map((q) => (
+          <a href={q.href} class="quick-card card" data-reveal>
+            <span class="q-icon"><Icon name={q.icon} size={24} strokeWidth={1.7} /></span>
+            <span class="q-label">{q.label}</span>
+            <span class="q-desc">{q.desc}</span>
+            <span class="q-arrow"><Icon name="chevron-right" size={18} /></span>
+          </a>
+        ))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero { position: relative; overflow: hidden; padding-top: 8px; }
+  .hero-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
+  .hero-bg img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+  .hero-bg::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(38,64,42,0.15) 0%, rgba(38,64,42,0.55) 65%, var(--color-cream) 100%);
+  }
+  .hero-in { position: relative; z-index: 1; padding-block: 120px 160px; max-width: 780px; }
+  .hero .eyebrow { color: var(--color-gabah); }
+  .hero .eyebrow::before { background: var(--color-gabah); }
+  .hero h1 { color: var(--color-white); }
+  .hero-lead { color: rgba(255,255,255,0.88); font-size: 1.1rem; max-width: 58ch; }
+  .hero-cta { display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px; }
+
+  .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+
+  .section-head.between { display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+  .section-head.light h2, .section-head.light p:not(.eyebrow) { color: var(--color-cream); }
+
+  .news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+
+  .gallery-section { background: var(--color-forest); }
+  .gallery-preview { display: grid; grid-template-columns: repeat(6, 1fr); grid-auto-rows: 110px; gap: 12px; }
+  .g-item { position: relative; overflow: hidden; border-radius: var(--radius-sm); display: block; }
+  .g-item :global(svg) { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease); }
+  .g-item:hover :global(svg) { transform: scale(1.08); }
+  .g-item-1, .g-item-4 { grid-row: span 2; }
+  .g-caption {
+    position: absolute; inset: auto 0 0 0; padding: 8px 10px 6px;
+    font-size: 0.72rem; font-weight: 600; color: #fff;
+    background: linear-gradient(0deg, rgba(0,0,0,0.55), transparent);
+  }
+
+  .quick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .quick-card { padding: 24px; display: flex; flex-direction: column; align-items: flex-start; gap: 6px; position: relative; }
+  .q-icon { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; background: var(--color-cream-2); color: var(--color-forest); margin-bottom: 6px; }
+  .q-label { font-family: var(--font-display); font-size: 1.1rem; font-weight: 600; color: var(--color-forest); }
+  .q-desc { font-size: 0.88rem; color: var(--color-ink-soft); }
+  .q-arrow { position: absolute; top: 22px; right: 22px; color: var(--color-gabah-dark); transition: transform var(--dur) var(--ease); }
+  .quick-card:hover .q-arrow { transform: translateX(4px); }
+
+  @media (max-width: 900px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .news-grid { grid-template-columns: 1fr; }
+    .gallery-preview { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 96px; }
+    .quick-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 560px) {
+    .hero-in { padding-block: 96px 100px; }
+    .quick-grid { grid-template-columns: 1fr; }
+    .gallery-preview { grid-template-columns: repeat(2, 1fr); }
+  }
+
+   .sambutan-layout {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 56px;
+    align-items: center;
+  }
+  .sambutan-photo {
+    width: 260px;
+    height: 340px;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--color-forest);
+    display: grid;
+    place-items: center;
+    box-shadow: var(--shadow-soft);
+    border: 5px solid var(--color-gabah);
+    flex: none;
+  }
+  .sambutan-photo img { width: 100%; height: 100%; object-fit: contain; object-position: center top; }
+  .photo-fallback {
+    font-family: var(--font-display);
+    font-size: 4.2rem;
+    font-weight: 600;
+    color: var(--color-gabah);
+  }
+  .sambutan-text h2 { font-size: clamp(1.9rem, 3vw, 2.6rem); }
+  .sambutan-text .nama { font-family: var(--font-display); font-size: 1.6rem; font-weight: 600; color: var(--color-forest); margin-bottom: 0; margin-top: 4px; }
+  .sambutan-text .jabatan { font-size: 0.92rem; font-weight: 700; color: var(--color-gabah-dark); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
+  .sambutan-text .isi { margin-top: 16px; font-size: 1.05rem; line-height: 1.75; max-width: 68ch; }
+
+  @media (max-width: 860px) {
+    .sambutan-layout { grid-template-columns: 1fr; text-align: center; }
+    .sambutan-photo { margin: 0 auto; width: 220px; height: 220px; }
+    .sambutan-text .isi { max-width: none; }
+  }
+
+  .section-head.center { text-align: center; max-width: 640px; margin-inline: auto; }
+  .section-head.center .eyebrow::before { display: none; }
+
+  .lokasi-card {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+  }
+  .lokasi-info {
+    background: var(--color-forest);
+    color: var(--color-cream);
+    padding: 44px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .lokasi-info h3 { color: var(--color-cream); font-size: 1.5rem; margin-bottom: 0; }
+  .lokasi-info > p { color: rgba(247,243,233,0.82); margin-bottom: 4px; }
+  .lokasi-point { display: flex; gap: 12px; align-items: flex-start; }
+  .lokasi-point :global(svg) { color: var(--color-gabah); flex: none; margin-top: 3px; }
+  .lokasi-point strong { display: block; font-size: 0.94rem; margin-bottom: 2px; }
+  .lokasi-point p { color: rgba(247,243,233,0.78); font-size: 0.88rem; margin: 0; }
+  .lokasi-info .btn { margin-top: 10px; align-self: flex-start; }
+
+  .lokasi-map { min-height: 380px; }
+  .lokasi-map iframe { width: 100%; height: 100%; min-height: 380px; border: 0; display: block; }
+
+  @media (max-width: 860px) {
+    .lokasi-card { grid-template-columns: 1fr; }
+    .lokasi-map { min-height: 280px; }
+    .lokasi-map iframe { min-height: 280px; }
+  }
+
+  .lokasi-section .section-head.center {
+    text-align: center;
+    max-width: 620px;
+    margin: 0 auto 40px;
+  }
+  .lokasi-section .section-head.center .eyebrow { display: none; }
+  .head-line {
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: var(--color-gabah);
+    margin: 14px auto 18px;
+    border-radius: 2px;
+  }
+
+  .lokasi-card {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+  }
+  .lokasi-info {
+    background: var(--color-forest);
+    color: var(--color-cream);
+    padding: 44px 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .lokasi-info h3 { color: var(--color-cream); font-size: 1.5rem; margin-bottom: 0; }
+  .lokasi-info > p { color: rgba(247,243,233,0.82); margin-bottom: 4px; }
+  .lokasi-point { display: flex; gap: 12px; align-items: flex-start; text-align: left; }
+  .lokasi-point :global(svg) { color: var(--color-gabah); flex: none; margin-top: 3px; }
+  .lokasi-point strong { display: block; font-size: 0.94rem; margin-bottom: 2px; color: var(--color-cream); }
+  .lokasi-point p { color: rgba(247,243,233,0.78); font-size: 0.88rem; margin: 0; }
+  .lokasi-info .btn { margin-top: 10px; align-self: flex-start; }
+
+  .lokasi-map { min-height: 420px; }
+  .lokasi-map iframe { width: 100%; height: 100%; min-height: 420px; border: 0; display: block; }
+
+  @media (max-width: 860px) {
+    .lokasi-card { grid-template-columns: 1fr; }
+    .lokasi-map { min-height: 280px; }
+    .lokasi-map iframe { min-height: 280px; }
+  }
+
+  /* ===== APBDes ===== */
+  .apbdes-summary {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 44px;
+  }
+  .apbdes-stat {
+    background: var(--color-white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    border-top: 4px solid var(--color-sawah);
+    padding: 24px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .apbdes-label { font-size: 0.84rem; color: var(--color-ink-soft); }
+  .apbdes-value { font-family: var(--font-display); font-size: 1.55rem; font-weight: 650; color: var(--color-forest); }
+  .apbdes-highlight { border-top-color: var(--color-gabah); }
+  .apbdes-highlight .apbdes-value { color: var(--color-gabah-dark); }
+
+  .apbdes-tables {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 24px;
+    align-items: start;
+  }
+
+  .apbdes-panel {
+    background: var(--color-white);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-card);
+    overflow: hidden;
+  }
+  .apbdes-panel-wide { margin-bottom: 24px; }
+  .apbdes-panel-head {
+    background: var(--color-forest);
+    color: var(--color-cream);
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 1.05rem;
+    padding: 16px 22px;
+  }
+
+  .apbdes-table { width: 100%; border-collapse: collapse; font-size: 0.92rem; }
+  .apbdes-table thead th {
+    background: var(--color-cream-2);
+    color: var(--color-ink-soft);
+    text-transform: uppercase;
+    font-size: 0.72rem;
+    letter-spacing: 0.04em;
+    font-weight: 700;
+    padding: 10px 22px;
+    text-align: left;
+  }
+  .apbdes-table thead th:last-child,
+  .apbdes-table td:last-child { text-align: right; white-space: nowrap; }
+  .apbdes-table td { padding: 12px 22px; border-bottom: 1px solid var(--color-line); color: var(--color-ink); }
+  .apbdes-table tbody tr:last-child td { border-bottom: none; }
+
+  .apbdes-table tr.apbdes-bidang td {
+    background: var(--color-cream-2);
+    font-weight: 700;
+    color: var(--color-forest);
+    padding-top: 14px;
+    padding-bottom: 14px;
+  }
+  .apbdes-table td.apbdes-sub { padding-left: 38px; color: var(--color-ink-soft); font-size: 0.88rem; }
+  .apbdes-table tr.apbdes-subtotal td { font-weight: 700; background: rgba(124,154,91,0.08); }
+  .apbdes-table tr.apbdes-total td { font-weight: 700; background: var(--color-cream-2); }
+  .apbdes-table tr.apbdes-grand-total td {
+    background: var(--color-forest);
+    color: var(--color-cream);
+    font-weight: 700;
+    font-size: 1rem;
+    padding-block: 16px;
+  }
+
+  .apbdes-note { font-size: 0.82rem; color: var(--color-ink-soft); text-align: center; margin-top: 8px; }
+
+  @media (max-width: 900px) {
+    .apbdes-summary { grid-template-columns: 1fr; }
+    .apbdes-tables { grid-template-columns: 1fr; }
+    .apbdes-table td, .apbdes-table th { padding: 10px 14px; }
+  }
+</style>

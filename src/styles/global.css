@@ -1,0 +1,255 @@
+/* =========================================================
+   DESA MARABAU — Design Tokens & Base Styles
+   Palet terinspirasi kontur sawah berundak & warna alam desa.
+   ========================================================= */
+
+@font-face {
+  font-family: 'Fraunces';
+  src: local('Fraunces');
+}
+
+:root {
+  /* --- Warna --- */
+  --color-forest: #26402A;      /* hijau hutan tua — warna utama */
+  --color-forest-2: #375C3C;    /* hijau daun */
+  --color-sawah: #7C9A5B;       /* hijau sawah — aksen sekunder */
+  --color-gabah: #C89B3C;       /* emas gabah/padi — aksen CTA */
+  --color-gabah-dark: #A67C2E;
+  --color-tanah: #7A4B2E;       /* cokelat tanah */
+  --color-cream: #F7F3E9;       /* krem — latar netral */
+  --color-cream-2: #EFE8D6;
+  --color-ink: #23291E;         /* teks utama */
+  --color-ink-soft: #52594B;    /* teks sekunder */
+  --color-white: #FFFFFF;
+  --color-line: #E1D9C4;
+
+  /* --- Tipografi --- */
+  --font-display: 'Fraunces', 'Georgia', serif;
+  --font-body: 'Plus Jakarta Sans', 'Segoe UI', system-ui, sans-serif;
+
+  /* --- Layout --- */
+  --container-w: 1180px;
+  --radius-sm: 6px;
+  --radius-md: 14px;
+  --radius-lg: 28px;
+  --shadow-soft: 0 12px 32px -16px rgba(35, 41, 30, 0.28);
+  --shadow-card: 0 6px 20px -10px rgba(35, 41, 30, 0.22);
+
+  /* --- Transisi --- */
+  --ease: cubic-bezier(0.22, 1, 0.36, 1);
+  --dur: 0.5s;
+
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--color-cream);
+  color: var(--color-ink);
+  line-height: 1.65;
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+
+a { color: inherit; text-decoration: none; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--color-forest);
+  line-height: 1.15;
+  margin: 0 0 0.5em;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+h1 { font-size: clamp(2.2rem, 4.5vw, 3.6rem); font-weight: 620; }
+h2 { font-size: clamp(1.7rem, 3vw, 2.5rem); }
+h3 { font-size: clamp(1.25rem, 2vw, 1.6rem); }
+p { margin: 0 0 1em; color: var(--color-ink-soft); }
+
+ul { padding-left: 1.2em; }
+
+/* --- Fokus keyboard, aksesibilitas --- */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid var(--color-gabah);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* --- Utilitas Layout --- */
+.container {
+  width: 100%;
+  max-width: var(--container-w);
+  margin-inline: auto;
+  padding-inline: 20px;
+}
+
+@media (min-width: 640px) {
+  .container { padding-inline: 32px; }
+}
+
+.section {
+  padding-block: clamp(56px, 8vw, 108px);
+}
+
+.section-head {
+  max-width: 640px;
+  margin-bottom: 44px;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-gabah-dark);
+  margin-bottom: 14px;
+}
+.eyebrow::before {
+  content: '';
+  width: 22px;
+  height: 2px;
+  background: var(--color-gabah);
+  display: inline-block;
+}
+
+/* --- Tombol --- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 26px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.94rem;
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease), background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.btn:hover { transform: translateY(-2px); }
+
+.btn-primary {
+  background: var(--color-gabah);
+  color: var(--color-forest);
+  box-shadow: var(--shadow-card);
+}
+.btn-primary:hover { background: var(--color-gabah-dark); box-shadow: var(--shadow-soft); }
+
+.btn-outline {
+  background: transparent;
+  border-color: rgba(255,255,255,0.55);
+  color: inherit;
+}
+.btn-outline:hover { background: rgba(255,255,255,0.12); }
+
+.btn-line {
+  background: transparent;
+  border-color: var(--color-forest);
+  color: var(--color-forest);
+}
+.btn-line:hover { background: var(--color-forest); color: var(--color-white); }
+
+/* --- Kartu --- */
+.card {
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+  transition: transform var(--dur) var(--ease), box-shadow var(--dur) var(--ease);
+}
+.card:hover { transform: translateY(-6px); box-shadow: var(--shadow-soft); }
+
+/* --- Scroll reveal --- */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+[data-reveal].is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+[data-reveal-group] > * { transition-delay: calc(var(--i, 0) * 90ms); }
+
+/* --- Tabel data (batas wilayah, orbitasi) --- */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--color-white);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--shadow-card);
+}
+.data-table th, .data-table td {
+  padding: 14px 18px;
+  text-align: left;
+  border-bottom: 1px solid var(--color-line);
+  font-size: 0.96rem;
+}
+.data-table th {
+  background: var(--color-forest);
+  color: var(--color-cream);
+  font-family: var(--font-display);
+  font-weight: 600;
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: var(--color-cream-2); }
+
+/* --- Badge kategori --- */
+.badge {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  background: var(--color-sawah);
+  color: var(--color-white);
+}
+
+.skip-link {
+  position: absolute;
+  left: -999px;
+  top: 0;
+  background: var(--color-forest);
+  color: var(--color-white);
+  padding: 12px 20px;
+  z-index: 999;
+  border-radius: 0 0 8px 0;
+}
+.skip-link:focus { left: 0; }
+
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}

@@ -1,0 +1,182 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import KonturDivider from '../../components/KonturDivider.astro';
+import Illustration from '../../components/Illustration.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('berita', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime());
+
+const kategoriList = ['Semua', ...Array.from(new Set(posts.map((p) => p.data.kategori)))];
+const fmt = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<BaseLayout title="Berita & Pengumuman" description="Kumpulan berita, kegiatan, dan pengumuman resmi Desa Marabau.">
+   <section class="page-hero photo-hero">
+    <div class="hero-bg-photo" aria-hidden="true">
+      <img src="/images/berita/berita.jpg" alt="" />
+    </div>
+    <div class="container">
+      <p class="eyebrow">Berita Desa</p>
+      <h1>Berita &amp; Pengumuman</h1>
+      <p class="lead">Kabar terbaru seputar kegiatan, pembangunan, dan pengumuman resmi Desa Marabau.</p>
+    </div>
+  </section>
+  <KonturDivider tone="cream" flip />
+
+  <section class="section">
+    <div class="container">
+      <div class="toolbar">
+        <div class="search-box">
+          <Icon name="search" size={18} />
+          <input type="search" id="berita-search" placeholder="Cari judul atau isi berita…" aria-label="Cari berita" />
+        </div>
+        <div class="filter-chips" id="filter-chips" role="group" aria-label="Filter kategori berita">
+          {kategoriList.map((k, i) => (
+            <button type="button" class="chip" data-kategori={k} aria-pressed={i === 0 ? 'true' : 'false'}>{k}</button>
+          ))}
+        </div>
+      </div>
+
+      <div class="news-grid" id="news-grid">
+        {posts.map((post) => (
+          <article
+            class="news-card card"
+            data-kategori={post.data.kategori}
+            data-search={`${post.data.title} ${post.data.ringkasan}`.toLowerCase()}
+          >
+           <a href={`/berita/${post.id}/`} class="thumb" tabindex="-1" aria-hidden="true">
+              {post.data.fotoUtama
+                ? <img src={post.data.fotoUtama} alt={post.data.title} loading="lazy" />
+                : <Illustration variant={(post.data.gambar as any) || 'sawah'} title={post.data.title} />}
+              <span class="badge">{post.data.kategori}</span>
+            </a>
+            <div class="body">
+              <p class="meta"><Icon name="calendar" size={14} /> {fmt.format(post.data.date)}</p>
+              <h3><a href={`/berita/${post.id}/`}>{post.data.title}</a></h3>
+              <p class="excerpt">{post.data.ringkasan}</p>
+              <a class="read-more" href={`/berita/${post.id}/`}>Baca selengkapnya <Icon name="arrow-right" size={15} /></a>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <p id="empty-state" class="empty-state" hidden>Tidak ada berita yang cocok dengan pencarian/filter Anda.</p>
+
+      <div class="load-more-wrap">
+        <button type="button" id="load-more" class="btn btn-line">Muat Lebih Banyak</button>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+ .page-hero { padding-block: 64px 40px; }
+
+  .photo-hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: 100px 64px;
+    isolation: isolate;
+  }
+  .hero-bg-photo { position: absolute; inset: 0; z-index: -1; }
+  .hero-bg-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+  .hero-bg-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(38,64,42,0.55) 0%, rgba(38,64,42,0.78) 60%, var(--color-cream) 100%);
+  }
+  .photo-hero .eyebrow { color: var(--color-gabah); }
+  .photo-hero .eyebrow::before { background: var(--color-gabah); }
+  .photo-hero h1 { color: var(--color-white); }
+  .photo-hero .lead { color: rgba(255,255,255,0.9); }
+  .page-hero .lead { max-width: 62ch; font-size: 1.05rem; }
+
+  .toolbar { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; align-items: center; margin-bottom: 34px; }
+  .search-box {
+    display: flex; align-items: center; gap: 10px; background: var(--color-white);
+    border: 1px solid var(--color-line); border-radius: 999px; padding: 10px 18px; min-width: 260px;
+    box-shadow: var(--shadow-card); color: var(--color-ink-soft);
+  }
+  .search-box input { border: none; outline: none; background: transparent; font: inherit; flex: 1; color: var(--color-ink); }
+
+  .filter-chips { display: flex; gap: 8px; flex-wrap: wrap; }
+  .chip {
+    border: 1px solid var(--color-line); background: var(--color-white); border-radius: 999px;
+    padding: 8px 16px; font-size: 0.86rem; font-weight: 600; cursor: pointer; color: var(--color-ink);
+    transition: background var(--dur) var(--ease), color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+  }
+  .chip[aria-pressed='true'] { background: var(--color-forest); color: var(--color-cream); border-color: var(--color-forest); }
+
+  .news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+  .news-card { display: flex; flex-direction: column; }
+  .thumb { position: relative; display: block; aspect-ratio: 4/3; overflow: hidden; }
+  .thumb :global(svg) { width: 100%; height: 100%; object-fit: cover; }
+.thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .thumb .badge { position: absolute; top: 12px; left: 12px; background: var(--color-forest); }
+  .body { padding: 20px 22px 24px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .meta { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--color-ink-soft); margin: 0; }
+  .body h3 { margin: 0; font-size: 1.1rem; }
+  .body h3 a:hover { color: var(--color-gabah-dark); }
+  .excerpt { font-size: 0.9rem; margin: 0; flex: 1; }
+  .read-more { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 0.86rem; color: var(--color-forest); }
+
+  .empty-state { text-align: center; padding: 40px 0; color: var(--color-ink-soft); }
+  .load-more-wrap { display: flex; justify-content: center; margin-top: 40px; }
+
+  @media (max-width: 900px) { .news-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 620px) { .news-grid { grid-template-columns: 1fr; } .toolbar { flex-direction: column; align-items: stretch; } }
+</style>
+
+<script>
+  // Filter kategori + pencarian client-side (tanpa backend), plus tombol "muat lebih banyak".
+  const grid = document.getElementById('news-grid');
+  const cards = Array.from(grid?.querySelectorAll<HTMLElement>('.news-card') ?? []);
+  const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('.chip'));
+  const searchInput = document.getElementById('berita-search') as HTMLInputElement | null;
+  const emptyState = document.getElementById('empty-state');
+  const loadMoreBtn = document.getElementById('load-more');
+
+  const PAGE_SIZE = 6;
+  let visibleCount = PAGE_SIZE;
+  let activeKategori = 'Semua';
+  let query = '';
+
+  function matches(card: HTMLElement) {
+    const kategoriOk = activeKategori === 'Semua' || card.dataset.kategori === activeKategori;
+    const searchOk = !query || (card.dataset.search || '').includes(query);
+    return kategoriOk && searchOk;
+  }
+
+  function render() {
+    const filtered = cards.filter(matches);
+    cards.forEach((c) => (c.style.display = 'none'));
+    filtered.slice(0, visibleCount).forEach((c) => (c.style.display = ''));
+    if (emptyState) emptyState.hidden = filtered.length > 0;
+    if (loadMoreBtn) (loadMoreBtn as HTMLElement).style.display = filtered.length > visibleCount ? '' : 'none';
+  }
+
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      chips.forEach((c) => c.setAttribute('aria-pressed', 'false'));
+      chip.setAttribute('aria-pressed', 'true');
+      activeKategori = chip.dataset.kategori || 'Semua';
+      visibleCount = PAGE_SIZE;
+      render();
+    });
+  });
+
+  searchInput?.addEventListener('input', () => {
+    query = searchInput.value.trim().toLowerCase();
+    visibleCount = PAGE_SIZE;
+    render();
+  });
+
+  loadMoreBtn?.addEventListener('click', () => {
+    visibleCount += PAGE_SIZE;
+    render();
+  });
+
+  render();
+</script>

@@ -1,0 +1,129 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import KonturDivider from '../../components/KonturDivider.astro';
+import { getCollection, render } from 'astro:content';
+
+const perangkat = (await getCollection('perangkat')).sort((a, b) => a.data.urutan - b.data.urutan);
+const dusunList = (await getCollection('dusun')).sort((a, b) => a.data.urutan - b.data.urutan);
+
+const initials = (name: string) =>
+  name.split(' ').filter(Boolean).slice(0, 2).map((w) => w[0]).join('').toUpperCase();
+---
+<BaseLayout title="Pemerintahan Desa" description="Struktur organisasi, perangkat desa, dan pembagian wilayah administratif Desa Marabau.">
+ <section class="page-hero photo-hero">
+    <div class="hero-bg-photo" aria-hidden="true">
+      <img src="/images/pemerintahan/kantor-lurah-marabau.jpg" alt="" />
+    </div>
+    <div class="container">
+      <p class="eyebrow">Kondisi Pemerintahan</p>
+      <h1>Struktur &amp; Perangkat Desa</h1>
+      <p class="lead">Susunan organisasi pemerintahan, perangkat yang menjabat, serta pembagian wilayah administratif Desa Marabau.</p>
+    </div>
+  </section>
+  <KonturDivider tone="cream" flip />
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Struktur Organisasi</p>
+        <h2>Bagan Organisasi Pemerintah Desa</h2>
+      </div>
+      <div class="chart-wrap card">
+        <img src="/images/pemerintahan/struktur-organisasi-desa.jpg" alt="Struktur Organisasi Perangkat Desa Marabau" />
+      </div>
+    </div>
+  </section>
+
+  <section class="section alt">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Perangkat Desa</p>
+        <h2>Susunan Perangkat Desa Marabau</h2>
+      </div>
+      <div class="perangkat-grid" data-reveal-group>
+        {perangkat.map((p) => (
+          <div class="perangkat-card card" data-reveal>
+            <div class="avatar">{initials(p.data.nama)}</div>
+            <h3>{p.data.nama}</h3>
+            <p class="jabatan">{p.data.jabatan}</p>
+            {p.data.periode && <p class="periode">Periode {p.data.periode}</p>}
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Pembagian Wilayah</p>
+        <h2>Wilayah Administratif Dusun</h2>
+      </div>
+     <div class="dusun-grid" data-reveal-group>
+        {await Promise.all(dusunList.map(async (d) => {
+          const { Content } = await render(d);
+          return (
+            <div class="dusun-card card" data-reveal>
+              <span class="dusun-icon"><Icon name="flag" size={22} strokeWidth={1.7} /></span>
+              <h3>{d.data.nama}</h3>
+              <p class="dusun-kepala"><strong>Kepala Dusun:</strong> {d.data.kepala}</p>
+              <div class="dusun-desc"><Content /></div>
+            </div>
+          );
+        }))}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-hero { padding-block: 64px 40px; }
+
+  .photo-hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: 100px 64px;
+    isolation: isolate;
+  }
+  .hero-bg-photo { position: absolute; inset: 0; z-index: -1; }
+  .hero-bg-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+  .hero-bg-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(38,64,42,0.55) 0%, rgba(38,64,42,0.78) 60%, var(--color-cream) 100%);
+  }
+  .photo-hero .eyebrow { color: var(--color-gabah); }
+  .photo-hero .eyebrow::before { background: var(--color-gabah); }
+  .photo-hero h1 { color: var(--color-white); }
+  .photo-hero .lead { color: rgba(255,255,255,0.9); }
+  .page-hero .lead { max-width: 62ch; font-size: 1.05rem; }
+  .section.alt { background: var(--color-cream-2); }
+
+ .chart-wrap { padding: clamp(16px, 3vw, 28px); overflow-x: auto; }
+.chart-wrap img { width: 100%; max-width: 1100px; display: block; margin: 0 auto; border-radius: var(--radius-sm); }
+  .perangkat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+  .perangkat-card { padding: 26px 20px; text-align: center; }
+  .avatar {
+    width: 66px; height: 66px; border-radius: 50%; margin: 0 auto 14px;
+    display: grid; place-items: center; background: var(--color-forest); color: var(--color-gabah);
+    font-family: var(--font-display); font-weight: 600; font-size: 1.1rem;
+  }
+  .perangkat-card h3 { font-size: 1rem; margin-bottom: 2px; }
+  .jabatan { font-size: 0.86rem; color: var(--color-gabah-dark); font-weight: 700; margin: 0; }
+  .periode { font-size: 0.78rem; color: var(--color-ink-soft); margin-top: 4px; }
+  .foto-note { margin-top: 24px; font-size: 0.82rem; color: var(--color-ink-soft); text-align: center; }
+
+  .dusun-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .dusun-card { padding: 26px; }
+  .dusun-icon { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; background: var(--color-cream-2); color: var(--color-forest); margin-bottom: 14px; }
+  .dusun-kepala { margin: 14px 0 10px; font-size: 0.9rem; color: var(--color-ink); }
+  .dusun-kepala strong { color: var(--color-forest); }
+  .dusun-desc { font-size: 0.88rem; color: var(--color-ink-soft); line-height: 1.6; }
+
+  @media (max-width: 900px) {
+    .perangkat-grid { grid-template-columns: repeat(2, 1fr); }
+    .dusun-grid { grid-template-columns: 1fr; }
+  }
+</style>

@@ -1,0 +1,53 @@
+---
+// OrgChart.astro — bagan struktur organisasi pemerintahan desa, disusun dengan CSS Grid ringan
+// (tanpa library diagram berat). Ubah isi array `struktur` sesuai kondisi desa.
+const struktur = [
+  { level: 1, jabatan: 'Kepala Desa' },
+  { level: 2, jabatan: 'Sekretaris Desa' },
+  { level: 3, jabatan: 'Kaur Pemerintahan' },
+  { level: 3, jabatan: 'Kaur Keuangan' },
+  { level: 3, jabatan: 'Kaur Umum' },
+  { level: 4, jabatan: 'Kasi Kesejahteraan' },
+  { level: 4, jabatan: 'Kasi Pelayanan' },
+  { level: 5, jabatan: 'Kepala Dusun I' },
+  { level: 5, jabatan: 'Kepala Dusun II' },
+  { level: 5, jabatan: 'Kepala Dusun III' },
+];
+---
+<div class="org-chart" data-reveal>
+  <div class="tier tier-1"><div class="node node-head">{struktur[0].jabatan}</div></div>
+  <div class="connector"></div>
+  <div class="tier tier-2"><div class="node node-mid">{struktur[1].jabatan}</div></div>
+  <div class="connector"></div>
+  <div class="tier tier-3">
+    {struktur.filter(s => s.level === 3).map(s => <div class="node">{s.jabatan}</div>)}
+  </div>
+  <div class="connector"></div>
+  <div class="tier tier-4">
+    {struktur.filter(s => s.level === 4).map(s => <div class="node">{s.jabatan}</div>)}
+  </div>
+  <div class="connector"></div>
+  <div class="tier tier-5">
+    {struktur.filter(s => s.level === 5).map(s => <div class="node node-dusun">{s.jabatan}</div>)}
+  </div>
+</div>
+
+<style>
+  .org-chart { display: flex; flex-direction: column; align-items: center; gap: 0; }
+  .tier { display: flex; flex-wrap: wrap; justify-content: center; gap: 14px; width: 100%; }
+  .connector { width: 2px; height: 26px; background: var(--color-line); }
+  .node {
+    background: var(--color-white);
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-sm);
+    padding: 12px 18px;
+    font-weight: 600;
+    font-size: 0.92rem;
+    color: var(--color-forest);
+    box-shadow: var(--shadow-card);
+    text-align: center;
+  }
+  .node-head { background: var(--color-forest); color: var(--color-cream); font-family: var(--font-display); font-size: 1.05rem; padding: 16px 30px; }
+  .node-mid { background: var(--color-sawah); color: var(--color-white); }
+  .node-dusun { border-color: var(--color-gabah); }
+</style>

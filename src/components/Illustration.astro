@@ -1,0 +1,106 @@
+---
+// Illustration.astro — ilustrasi flat bertema desa sebagai placeholder pengganti foto asli.
+// Admin desa cukup mengganti dengan foto sungguhan (lihat README bagian "Mengganti Gambar").
+interface Props {
+  variant?: 'sawah' | 'balai-desa' | 'gotong-royong' | 'panen' | 'sungai' | 'gunung' | 'pasar' | 'posyandu';
+  class?: string;
+  title?: string;
+}
+const { variant = 'sawah', class: klass = '', title } = Astro.props;
+---
+{variant === 'sawah' && (
+<svg class={klass} viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={title || 'Ilustrasi sawah berundak'}>
+  <rect width="400" height="300" fill="#EFE8D6"/>
+  <path d="M0 120 Q100 90 200 120 T400 110 V0 H0 Z" fill="#BFD8B8"/>
+  <path d="M0 150 Q120 190 220 150 T400 160 V80 Q300 60 200 90 T0 90 Z" fill="#7C9A5B"/>
+  <path d="M0 195 Q110 230 230 190 T400 205 V150 Q280 190 190 155 T0 140 Z" fill="#5F8248"/>
+  <path d="M0 240 Q130 270 240 235 T400 250 V195 Q260 235 180 200 T0 190 Z" fill="#375C3C"/>
+  <rect x="0" y="240" width="400" height="60" fill="#26402A"/>
+  <circle cx="330" cy="45" r="26" fill="#C89B3C" opacity="0.85"/>
+</svg>
+)}
+{variant === 'balai-desa' && (
+<svg class={klass} viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={title || 'Ilustrasi balai desa'}>
+  <rect width="400" height="300" fill="#EFE8D6"/>
+  <rect y="230" width="400" height="70" fill="#7C9A5B"/>
+  <polygon points="200,90 320,170 80,170" fill="#7A4B2E"/>
+  <rect x="100" y="170" width="200" height="70" fill="#F7F3E9" stroke="#26402A" stroke-width="3"/>
+  <rect x="130" y="190" width="24" height="50" fill="#26402A"/>
+  <rect x="246" y="190" width="24" height="50" fill="#26402A"/>
+  <rect x="188" y="200" width="24" height="40" fill="#C89B3C"/>
+  <rect x="60" y="165" width="16" height="75" fill="#7A4B2E"/>
+  <rect x="324" y="165" width="16" height="75" fill="#7A4B2E"/>
+  <path d="M195 60 L205 60 L205 95 L195 95 Z" fill="#26402A"/>
+  <path d="M175 55 h50 l-10 12 h-30 z" fill="#C89B3C"/>
+</svg>
+)}
+{variant === 'gotong-royong' && (
+<svg class={klass} viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={title || 'Ilustrasi gotong royong warga'}>
+  <rect width="400" height="300" fill="#EFE8D6"/>
+  <rect y="250" width="400" height="50" fill="#BFD8B8"/>
+  <g fill="#375C3C"><circle cx="110" cy="150" r="18"/><rect x="92" y="168" width="36" height="70" rx="10"/></g>
+  <g fill="#C89B3C"><circle cx="200" cy="140" r="20"/><rect x="180" y="160" width="40" height="80" rx="10"/></g>
+  <g fill="#7A4B2E"><circle cx="290" cy="150" r="18"/><rect x="272" y="168" width="36" height="70" rx="10"/></g>
+  <rect x="60" y="235" width="280" height="10" fill="#26402A" opacity="0.5"/>
+</svg>
+)}
+{variant === 'panen' && (
+<svg class={klass} viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={title || 'Ilustrasi panen padi'}>
+  <rect width="400" height="300" fill="#EFE8D6"/>
+  <rect y="220" width="400" height="80" fill="#C89B3C" opacity="0.35"/>
+  <g stroke="#A67C2E" stroke-width="4" stroke-linecap="round">
+    <path d="M60 260 V190"/><path d="M100 260 V180"/><path d="M140 260 V195"/>
+    <path d="M200 260 V185"/><path d="M240 260 V200"/><path d="M300 260 V190"/><path d="M340 260 V182"/>
+  </g>
+  <g fill="#C89B3C">
+    <ellipse cx="60" cy="182" rx="10" ry="16"/><ellipse cx="100" cy="172" rx="10" ry="16"/>
+    <ellipse cx="140" cy="187" rx="10" ry="16"/><ellipse cx="200" cy="177" rx="10" ry="16"/>
+    <ellipse cx="240" cy="192" rx="10" ry="16"/><ellipse cx="300" cy="182" rx="10" ry="16"/>
+    <ellipse cx="340" cy="174" rx="10" ry="16"/>
+  </g>
+</svg>
+)}
+{variant === 'sungai' && (
+<svg class={klass} viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={title || 'Ilustrasi sungai desa'}>
+  <rect width="400" height="300" fill="#EFE8D6"/>
+  <path d="M0 90 Q200 60 400 100 V0H0Z" fill="#BFD8B8"/>
+  <path d="M0 120 Q150 200 220 150 T400 180 V95 Q250 130 180 105 T0 100Z" fill="#7C9A5B"/>
+  <path d="M-20 300 C60 180 140 260 220 190 S360 150 420 230 V300Z" fill="#9FC7DE"/>
+  <path d="M-20 300 C60 200 140 270 220 210 S360 180 420 250 V300Z" fill="#7BAFCB"/>
+</svg>
+)}
+{variant === 'gunung' && (
+<svg class={klass} viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={title || 'Ilustrasi gunung dan kabut'}>
+  <rect width="400" height="300" fill="#EFE8D6"/>
+  <polygon points="60,220 170,60 260,220" fill="#6B8663"/>
+  <polygon points="150,220 260,90 380,220" fill="#4A6146"/>
+  <polygon points="150,110 175,70 205,120" fill="#F7F3E9"/>
+  <rect y="190" width="400" height="20" fill="#F7F3E9" opacity="0.7"/>
+  <rect y="230" width="400" height="70" fill="#7C9A5B"/>
+</svg>
+)}
+{variant === 'pasar' && (
+<svg class={klass} viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={title || 'Ilustrasi pasar desa'}>
+  <rect width="400" height="300" fill="#EFE8D6"/>
+  <rect y="250" width="400" height="50" fill="#D9CFAF"/>
+  <g>
+    <rect x="60" y="170" width="90" height="70" fill="#F7F3E9" stroke="#26402A" stroke-width="2"/>
+    <polygon points="55,170 155,170 105,140" fill="#7A4B2E"/>
+    <rect x="220" y="180" width="90" height="60" fill="#F7F3E9" stroke="#26402A" stroke-width="2"/>
+    <polygon points="215,180 315,180 265,150" fill="#C89B3C"/>
+  </g>
+  <circle cx="120" cy="210" r="8" fill="#7C9A5B"/>
+  <circle cx="140" cy="215" r="8" fill="#A67C2E"/>
+  <circle cx="255" cy="215" r="8" fill="#7C9A5B"/>
+</svg>
+)}
+{variant === 'posyandu' && (
+<svg class={klass} viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label={title || 'Ilustrasi kegiatan posyandu'}>
+  <rect width="400" height="300" fill="#EFE8D6"/>
+  <rect y="250" width="400" height="50" fill="#BFD8B8"/>
+  <rect x="130" y="120" width="140" height="110" rx="14" fill="#F7F3E9" stroke="#26402A" stroke-width="3"/>
+  <path d="M200 150 v40 M180 170 h40" stroke="#C89B3C" stroke-width="8" stroke-linecap="round"/>
+  <circle cx="90" cy="210" r="16" fill="#7A4B2E"/>
+  <circle cx="310" cy="210" r="16" fill="#375C3C"/>
+</svg>
+)}

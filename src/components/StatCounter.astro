@@ -1,0 +1,76 @@
+---
+import Icon from './Icon.astro';
+interface Props {
+  icon: 'users' | 'map' | 'home' | 'flag' | 'landmark' | 'building';
+  value: number;
+  suffix?: string;
+  decimals?: number;
+  label: string;
+  note?: string;
+}
+const { icon, value, suffix = '', decimals = 0, label, note } = Astro.props;
+---
+<div class="stat card" data-reveal>
+  <span class="stat-icon"><Icon name={icon} size={26} strokeWidth={1.7} /></span>
+  <span class="stat-value" data-count-to={value} data-suffix={suffix} data-decimals={decimals}>0{suffix}</span>
+<span class="stat-label">{label}</span>
+{note && <span class="stat-note">{note}</span>}
+</div>
+
+<style>
+  .stat {
+    padding: 26px 22px;
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-top: 3px solid var(--color-gabah);
+  }
+  .stat-icon {
+    width: 46px; height: 46px; border-radius: 12px;
+    display: grid; place-items: center;
+    background: var(--color-cream-2); color: var(--color-forest);
+  }
+  .stat-value { font-family: var(--font-display); font-size: 2.1rem; font-weight: 650; color: var(--color-forest); }
+  .stat-label { color: var(--color-ink-soft); font-size: 0.92rem; }
+  .stat-note { font-size: 0.75rem; color: var(--color-ink-soft); opacity: 0.75; margin-top: -4px; }
+</style>
+
+<script>
+  // Animasi hitung naik, ringan, tanpa library — jalan saat elemen terlihat.
+  function animateCount(el: HTMLElement) {
+    const target = Number(el.dataset.countTo || '0');
+    const suffix = el.dataset.suffix || '';
+    const decimals = Number(el.dataset.decimals || '0');
+    const duration = 1200;
+    const start = performance.now();
+    function tick(now: number) {
+      const p = Math.min(1, (now - start) / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      const val = eased * target;
+      el.textContent = val.toLocaleString('id-ID', {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals,
+      }) + suffix;
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+  const counters = document.querySelectorAll<HTMLElement>('[data-count-to]');
+  if ('IntersectionObserver' in window && counters.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            animateCount(entry.target as HTMLElement);
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.4 }
+    );
+    counters.forEach((c) => io.observe(c));
+  } else {
+    counters.forEach((c) => animateCount(c));
+  }
+</script>

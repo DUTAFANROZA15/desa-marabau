@@ -1,0 +1,46 @@
+---
+import Illustration from './Illustration.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  slug: string;
+  title: string;
+  date: Date;
+  kategori: string;
+  ringkasan: string;
+  gambar?: string;
+  fotoUtama?: string;
+}
+const { slug, title, date, kategori, ringkasan, gambar = 'sawah', fotoUtama } = Astro.props;
+const tanggal = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }).format(date);
+---
+<article class="news-card card" data-reveal>
+  <a href={`/berita/${slug}/`} class="thumb" aria-hidden="true" tabindex="-1">
+    {fotoUtama
+      ? <img src={fotoUtama} alt={title} loading="lazy" />
+      : <Illustration variant={gambar as any} title={title} />}
+    <span class="badge">{kategori}</span>
+  </a>
+  <div class="body">
+    <p class="meta"><Icon name="calendar" size={14} /> {tanggal}</p>
+    <h3><a href={`/berita/${slug}/`}>{title}</a></h3>
+    <p class="excerpt">{ringkasan}</p>
+    <a class="read-more" href={`/berita/${slug}/`}>Baca selengkapnya <Icon name="arrow-right" size={15} /></a>
+  </div>
+</article>
+
+<style>
+  .news-card { display: flex; flex-direction: column; }
+  .thumb { position: relative; display: block; aspect-ratio: 4 / 3; overflow: hidden; }
+ .thumb :global(svg) { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease); }
+.thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s var(--ease); display: block; }
+  .news-card:hover .thumb :global(svg) { transform: scale(1.06); }
+  .thumb .badge { position: absolute; top: 12px; left: 12px; background: var(--color-forest); }
+  .body { padding: 20px 22px 24px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .meta { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--color-ink-soft); margin: 0; }
+  .body h3 { margin: 0; font-size: 1.15rem; }
+  .body h3 a:hover { color: var(--color-gabah-dark); }
+  .excerpt { font-size: 0.92rem; margin: 0; flex: 1; }
+  .read-more { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 0.88rem; color: var(--color-forest); margin-top: 4px; }
+  .read-more:hover { color: var(--color-gabah-dark); }
+</style>

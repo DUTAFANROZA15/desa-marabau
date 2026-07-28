@@ -1,0 +1,85 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Icon from '../../components/Icon.astro';
+import Illustration from '../../components/Illustration.astro';
+import NewsCard from '../../components/NewsCard.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('berita', ({ data }) => !data.draft);
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+const allPosts = (await getCollection('berita', ({ data }) => !data.draft))
+  .filter((p) => p.id !== post.id)
+  .sort((a, b) => b.data.date.getTime() - a.data.date.getTime())
+  .slice(0, 3);
+
+const fmt = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<BaseLayout title={post.data.title} description={post.data.ringkasan}>
+  <article class="section article">
+    <div class="container narrow">
+      <a href="/berita/" class="back-link"><Icon name="arrow-right" size={15} class="rotate" /> Kembali ke Berita</a>
+      <span class="badge">{post.data.kategori}</span>
+      <h1>{post.data.title}</h1>
+      <div class="meta-row">
+        <span><Icon name="calendar" size={15} /> {fmt.format(post.data.date)}</span>
+        <span><Icon name="users" size={15} /> {post.data.penulis}</span>
+      </div>
+
+     <div class="cover">
+        {post.data.fotoUtama
+          ? <img src={post.data.fotoUtama} alt={post.data.title} />
+          : <Illustration variant={(post.data.gambar as any) || 'sawah'} title={post.data.title} />}
+      </div>
+
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+  </article>
+
+  {allPosts.length > 0 && (
+    <section class="section related">
+      <div class="container">
+        <div class="section-head">
+          <p class="eyebrow">Baca Juga</p>
+          <h2>Berita Lainnya</h2>
+        </div>
+        <div class="news-grid">
+          {allPosts.map((p) => (
+            <NewsCard
+              slug={p.id}
+              title={p.data.title}
+              date={p.data.date}
+              kategori={p.data.kategori}
+              ringkasan={p.data.ringkasan}
+              gambar={p.data.gambar}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+  )}
+</BaseLayout>
+
+<style>
+  .container.narrow { max-width: 760px; }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; font-size: 0.88rem; color: var(--color-forest); margin-bottom: 18px; }
+  .back-link :global(.rotate) { transform: rotate(180deg); }
+  .article h1 { margin-top: 12px; }
+  .meta-row { display: flex; gap: 20px; flex-wrap: wrap; font-size: 0.86rem; color: var(--color-ink-soft); margin-bottom: 26px; }
+  .meta-row span { display: inline-flex; align-items: center; gap: 6px; }
+  .cover { border-radius: var(--radius-lg); overflow: hidden; margin-bottom: 34px; box-shadow: var(--shadow-soft); aspect-ratio: 16/9; }
+.cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .prose :global(p) { font-size: 1.02rem; }
+  .prose :global(h2) { margin-top: 1.4em; }
+
+  .related { background: var(--color-cream-2); }
+  .news-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+  @media (max-width: 900px) { .news-grid { grid-template-columns: 1fr; } }
+</style>
