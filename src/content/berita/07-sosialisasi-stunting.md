@@ -4,7 +4,7 @@ date: 2026-07-18
 kategori: "Sosial"
 ringkasan: "Mahasiswa Kuliah Kerja Nyata (KKN) Universitas Negeri Padang menyelenggarakan kegiatan Sosialisasi Pencegahan Stunting di Gedung Sekretariat TP-PKK Desa Marabau pada Sabtu, 18 Juli 2026. Kegiatan ini melibatkan Bidan Desa, Ibu Monic, serta diikuti oleh ibu hamil, ibu balita, kader Posyandu, anggota PKK, masyarakat, dan anak-anak sebagai upaya meningkatkan pemahaman mengenai pentingnya pencegahan stunting sejak dini."
 fotoUtama: "/images/berita/sosialisasi-stunting-2026.jpg"
-penulis: "Admin Desa"
+penulis: "KKN UNP MARABAU TAHUN 2026"
 ---
 
 Mahasiswa KKN Universitas Negeri Padang menggelar kegiatan Sosialisasi Pencegahan Stunting di Gedung Sekretariat TP-PKK Desa Marabau pada Sabtu, 18 Juli 2026. Kegiatan ini dihadiri oleh 25 peserta yang terdiri atas ibu hamil, ibu balita, kader Posyandu, anggota PKK, masyarakat, serta anak-anak. Sosialisasi ini bertujuan untuk meningkatkan pengetahuan masyarakat mengenai pentingnya menjaga kesehatan dan gizi keluarga sebagai langkah pencegahan stunting sejak dini.
