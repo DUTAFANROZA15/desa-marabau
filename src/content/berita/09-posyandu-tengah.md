@@ -1,6 +1,6 @@
 ---
 title: "Posyandu Dusun Tangah Berikan Layanan Kesehatan Terpadu bagi Warga Desa Marabau"
-date: 2026-14-10
+date: 2026-07-14
 kategori: "Sosial"
 ringkasan: "Kegiatan Posyandu Dusun Tangah Desa Marabau kembali dilaksanakan pada Selasa, 14 Juli 2026, dengan melibatkan kader Posyandu, tenaga kesehatan, serta dukungan mahasiswa KKN Universitas Negeri Padang. Kegiatan ini diikuti oleh masyarakat dari berbagai kelompok usia sebagai bentuk pelayanan kesehatan dasar yang rutin dilaksanakan."
 fotoUtama: "/images/berita/posyandu-tangah.jpg"
