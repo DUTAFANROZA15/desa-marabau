@@ -9,19 +9,22 @@ const items = (await getCollection('galeri')).sort(
   (a, b) => (b.data.tanggal?.getTime() ?? 0) - (a.data.tanggal?.getTime() ?? 0)
 );
 const kategoriList = ['Semua', ...Array.from(new Set(items.map((i) => i.data.kategori)))];
+
+// Gabungkan fotoUtama + fotoTambahan jadi satu daftar foto per tempat.
+// Kalau tidak ada foto asli sama sekali, daftar ini kosong dan tile akan pakai ilustrasi bawaan.
+function daftarFoto(item: (typeof items)[number]) {
+  const semua = [item.data.fotoUtama, ...(item.data.fotoTambahan || [])].filter(Boolean) as string[];
+  return semua;
+}
 ---
 <BaseLayout title="Galeri" description="Dokumentasi foto dan video kegiatan, alam, budaya, dan infrastruktur Desa Marabau.">
-  <section class="page-hero photo-hero">
-    <div class="hero-bg-photo" aria-hidden="true">
-      <img src="/images/galeri/galeri.jpg" alt="" />
-    </div>
+  <section class="page-hero">
     <div class="container">
       <p class="eyebrow">Galeri</p>
       <h1>Dokumentasi Desa Marabau</h1>
       <p class="lead">Kumpulan foto dan video kegiatan warga, keindahan alam, dan perkembangan pembangunan desa.</p>
     </div>
   </section>
-
   <KonturDivider tone="cream" flip />
 
   <section class="section">
@@ -33,22 +36,30 @@ const kategoriList = ['Semua', ...Array.from(new Set(items.map((i) => i.data.kat
       </div>
 
       <div class="gallery-grid" id="gallery-grid">
-        {items.map((item, i) => (
-          <button
-            type="button"
-            class="g-tile"
-            data-kategori={item.data.kategori}
-            data-index={i}
-            data-tipe={item.data.tipe}
-            data-youtube={item.data.youtubeId || ''}
-            data-judul={item.data.judul}
-            aria-label={`Perbesar: ${item.data.judul}`}
-          >
-            <Illustration variant={(item.data.gambar as any) || 'sawah'} title={item.data.judul} />
-            {item.data.tipe === 'video' && <span class="play-badge"><Icon name="play" size={20} /></span>}
-            <span class="g-caption">{item.data.judul}<em>{item.data.kategori}</em></span>
-          </button>
-        ))}
+        {items.map((item, i) => {
+          const foto = daftarFoto(item);
+          const sampul = foto[0]; // foto pertama = sampul yang tampil di grid
+          return (
+            <button
+              type="button"
+              class="g-tile"
+              data-kategori={item.data.kategori}
+              data-index={i}
+              data-tipe={item.data.tipe}
+              data-youtube={item.data.youtubeId || ''}
+              data-judul={item.data.judul}
+              data-photos={JSON.stringify(foto)}
+              aria-label={`Perbesar: ${item.data.judul}`}
+            >
+              {sampul
+                ? <img src={sampul} alt={item.data.judul} loading="lazy" />
+                : <Illustration variant={(item.data.gambar as any) || 'sawah'} title={item.data.judul} />}
+              {item.data.tipe === 'video' && <span class="play-badge"><Icon name="play" size={20} /></span>}
+              {foto.length > 1 && <span class="count-badge"><Icon name="image" size={13} /> {foto.length}</span>}
+              <span class="g-caption">{item.data.judul}<em>{item.data.kategori}</em></span>
+            </button>
+          );
+        })}
       </div>
     </div>
   </section>
@@ -59,34 +70,16 @@ const kategoriList = ['Semua', ...Array.from(new Set(items.map((i) => i.data.kat
   <div class="lightbox-backdrop" data-close></div>
   <div class="lightbox-panel" role="dialog" aria-modal="true" aria-label="Pratinjau galeri">
     <button type="button" class="lb-close" data-close aria-label="Tutup"><Icon name="close" size={22} /></button>
-    <button type="button" class="lb-nav lb-prev" data-prev aria-label="Sebelumnya"><Icon name="chevron-right" size={26} class="rotate" /></button>
+    <button type="button" class="lb-nav lb-prev" data-prev aria-label="Foto sebelumnya"><Icon name="chevron-right" size={26} class="rotate" /></button>
     <div class="lb-media" id="lb-media"></div>
     <p class="lb-caption" id="lb-caption"></p>
-    <button type="button" class="lb-nav lb-next" data-next aria-label="Berikutnya"><Icon name="chevron-right" size={26} /></button>
+    <p class="lb-counter" id="lb-counter"></p>
+    <button type="button" class="lb-nav lb-next" data-next aria-label="Foto berikutnya"><Icon name="chevron-right" size={26} /></button>
   </div>
 </div>
 
 <style>
   .page-hero { padding-block: 64px 40px; }
-
-  .photo-hero {
-    position: relative;
-    overflow: hidden;
-    padding-block: 100px 64px;
-    isolation: isolate;
-  }
-  .hero-bg-photo { position: absolute; inset: 0; z-index: -1; }
-  .hero-bg-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
-  .hero-bg-photo::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(38,64,42,0.55) 0%, rgba(38,64,42,0.78) 60%, var(--color-cream) 100%);
-  }
-  .photo-hero .eyebrow { color: var(--color-gabah); }
-  .photo-hero .eyebrow::before { background: var(--color-gabah); }
-  .photo-hero h1 { color: var(--color-white); }
-  .photo-hero .lead { color: rgba(255,255,255,0.9); }
   .page-hero .lead { max-width: 62ch; font-size: 1.05rem; }
 
   .filter-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 30px; }
@@ -102,11 +95,16 @@ const kategoriList = ['Semua', ...Array.from(new Set(items.map((i) => i.data.kat
     position: relative; border: none; padding: 0; cursor: pointer; border-radius: var(--radius-sm);
     overflow: hidden; aspect-ratio: 1; background: none; display: block;
   }
-  .g-tile :global(svg) { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease); }
-  .g-tile:hover :global(svg) { transform: scale(1.08); }
+  .g-tile :global(svg), .g-tile img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s var(--ease); display: block; }
+  .g-tile:hover :global(svg), .g-tile:hover img { transform: scale(1.08); }
   .play-badge {
     position: absolute; inset: 0; margin: auto; width: 48px; height: 48px; border-radius: 50%;
     background: rgba(38,64,42,0.75); color: #fff; display: grid; place-items: center;
+  }
+  .count-badge {
+    position: absolute; top: 10px; right: 10px; display: inline-flex; align-items: center; gap: 4px;
+    background: rgba(20,24,16,0.68); color: #fff; font-size: 0.7rem; font-weight: 700;
+    padding: 4px 8px; border-radius: 999px;
   }
   .g-caption {
     position: absolute; inset: auto 0 0 0; padding: 10px 12px 8px; text-align: left;
@@ -121,13 +119,15 @@ const kategoriList = ['Semua', ...Array.from(new Set(items.map((i) => i.data.kat
   .lightbox-panel {
     position: relative; z-index: 1; width: min(90vw, 820px); max-height: 88vh;
     background: var(--color-cream); border-radius: var(--radius-lg); padding: 20px;
-    display: flex; flex-direction: column; gap: 12px;
+    display: flex; flex-direction: column; gap: 10px;
   }
   .lb-media { border-radius: var(--radius-md); overflow: hidden; aspect-ratio: 16/9; background: #000; }
-  .lb-media :global(svg), .lb-media iframe { width: 100%; height: 100%; object-fit: cover; border: 0; }
+  .lb-media :global(svg), .lb-media img, .lb-media iframe { width: 100%; height: 100%; object-fit: cover; border: 0; display: block; }
   .lb-caption { margin: 0; text-align: center; font-weight: 700; color: var(--color-forest); }
+  .lb-counter { margin: 0; text-align: center; font-size: 0.8rem; color: var(--color-ink-soft); }
   .lb-close { position: absolute; top: -14px; right: -14px; width: 40px; height: 40px; border-radius: 50%; background: var(--color-forest); color: var(--color-cream); border: none; display: grid; place-items: center; cursor: pointer; }
   .lb-nav { position: absolute; top: 50%; translate: 0 -50%; width: 44px; height: 44px; border-radius: 50%; background: var(--color-white); border: none; display: grid; place-items: center; cursor: pointer; box-shadow: var(--shadow-card); }
+  .lb-nav[hidden] { display: none; }
   .lb-prev { left: -14px; }
   .lb-prev :global(.rotate) { transform: rotate(180deg); }
   .lb-next { right: -14px; }
@@ -154,35 +154,60 @@ const kategoriList = ['Semua', ...Array.from(new Set(items.map((i) => i.data.kat
     });
   });
 
-  // Lightbox
+  // Lightbox — panah kiri/kanan hanya berputar di dalam foto milik tempat yang sama
   const lightbox = document.getElementById('lightbox') as HTMLElement;
   const media = document.getElementById('lb-media') as HTMLElement;
   const caption = document.getElementById('lb-caption') as HTMLElement;
-  let currentIndex = 0;
+  const counter = document.getElementById('lb-counter') as HTMLElement;
+  const prevBtn = lightbox.querySelector('[data-prev]') as HTMLElement;
+  const nextBtn = lightbox.querySelector('[data-next]') as HTMLElement;
 
-  function visibleTiles() {
-    return tiles.filter((t) => t.style.display !== 'none');
-  }
+  let currentTile: HTMLButtonElement | null = null;
+  let currentPhotos: string[] = [];
+  let currentPhotoIndex = 0;
 
-  function openAt(index: number) {
-    const vis = visibleTiles();
-    if (!vis.length) return;
-    currentIndex = (index + vis.length) % vis.length;
-    const tile = vis[currentIndex];
-    const tipe = tile.dataset.tipe;
-    const judul = tile.dataset.judul || '';
-    if (tipe === 'video' && tile.dataset.youtube) {
-      media.innerHTML = `<iframe src="https://www.youtube.com/embed/${tile.dataset.youtube}" title="${judul}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
+  function renderPhoto() {
+    if (!currentTile) return;
+    const tipe = currentTile.dataset.tipe;
+    const judul = currentTile.dataset.judul || '';
+
+    if (tipe === 'video' && currentTile.dataset.youtube) {
+      media.innerHTML = `<iframe src="https://www.youtube.com/embed/${currentTile.dataset.youtube}" title="${judul}" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy"></iframe>`;
+    } else if (currentPhotos.length) {
+      media.innerHTML = `<img src="${currentPhotos[currentPhotoIndex]}" alt="${judul}" />`;
     } else {
-      const svg = tile.querySelector('svg');
+      const svg = currentTile.querySelector('svg');
       media.innerHTML = svg ? svg.outerHTML : '';
     }
+
     caption.textContent = judul;
+
+    const showNav = currentPhotos.length > 1;
+    prevBtn.hidden = !showNav;
+    nextBtn.hidden = !showNav;
+    counter.textContent = showNav ? `Foto ${currentPhotoIndex + 1} dari ${currentPhotos.length}` : '';
+  }
+
+  function openTile(tile: HTMLButtonElement) {
+    currentTile = tile;
+    try {
+      currentPhotos = JSON.parse(tile.dataset.photos || '[]');
+    } catch {
+      currentPhotos = [];
+    }
+    currentPhotoIndex = 0;
+    renderPhoto();
     lightbox.hidden = false;
     document.body.style.overflow = 'hidden';
   }
 
-  tiles.forEach((tile, i) => tile.addEventListener('click', () => openAt(i)));
+  function step(dir: number) {
+    if (!currentPhotos.length) return;
+    currentPhotoIndex = (currentPhotoIndex + dir + currentPhotos.length) % currentPhotos.length;
+    renderPhoto();
+  }
+
+  tiles.forEach((tile) => tile.addEventListener('click', () => openTile(tile)));
 
   function close() {
     lightbox.hidden = true;
@@ -191,12 +216,12 @@ const kategoriList = ['Semua', ...Array.from(new Set(items.map((i) => i.data.kat
   }
 
   lightbox.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', close));
-  lightbox.querySelector('[data-prev]')?.addEventListener('click', () => openAt(currentIndex - 1));
-  lightbox.querySelector('[data-next]')?.addEventListener('click', () => openAt(currentIndex + 1));
+  prevBtn.addEventListener('click', () => step(-1));
+  nextBtn.addEventListener('click', () => step(1));
   document.addEventListener('keydown', (e) => {
     if (lightbox.hidden) return;
     if (e.key === 'Escape') close();
-    if (e.key === 'ArrowLeft') openAt(currentIndex - 1);
-    if (e.key === 'ArrowRight') openAt(currentIndex + 1);
+    if (e.key === 'ArrowLeft') step(-1);
+    if (e.key === 'ArrowRight') step(1);
   });
 </script>

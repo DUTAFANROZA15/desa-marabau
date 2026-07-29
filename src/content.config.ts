@@ -27,6 +27,8 @@ const galeri = defineCollection({
     kategori: z.enum(['Kegiatan', 'Alam', 'Budaya', 'Infrastruktur']),
     tipe: z.enum(['foto', 'video']).default('foto'),
     gambar: z.string().optional(),
+    fotoUtama: z.string().optional(),
+    fotoTambahan: z.array(z.string()).optional().default([]),
     youtubeId: z.string().optional(),
     tanggal: z.coerce.date().optional(),
   }),

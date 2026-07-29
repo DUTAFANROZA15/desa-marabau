@@ -1,8 +1,11 @@
 ---
-judul: "Kantor dan Balai Desa Marabau"
+judul: "Kantor Desa Marabau"
 kategori: "Infrastruktur"
 tipe: "foto"
-gambar: "balai-desa"
-tanggal: 2026-01-15
+fotoUtama: "/images/galeri/kantor-desa-marabau-3.jpg"
+fotoTambahan:
+  - "/images/galeri/kantor-desa-marabau-2.jpg"
+  - "/images/galeri/kantor-desa-marabau-1.jpg"
+tanggal: 2026-07-27
 ---
-Kantor Desa Marabau yang berada di dekat Jalan Kompi Bakipeh.
+Plang nama, tampak bangunan, dan ruang pelayanan Kantor Desa Marabau.
