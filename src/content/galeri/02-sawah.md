@@ -1,5 +1,5 @@
 ---
-judul: "Hamparan Desa Marabau"
+judul: "Hamparan Sawah Desa Marabau"
 kategori: "Alam"
 tipe: "foto"
 fotoUtama: "/images/galeri/sawah-2.jpg"
