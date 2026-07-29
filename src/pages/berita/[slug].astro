@@ -52,15 +52,16 @@ const fmt = new Intl.DateTimeFormat('id-ID', { day: 'numeric', month: 'long', ye
         </div>
         <div class="news-grid">
           {allPosts.map((p) => (
-            <NewsCard
-              slug={p.id}
-              title={p.data.title}
-              date={p.data.date}
-              kategori={p.data.kategori}
-              ringkasan={p.data.ringkasan}
-              gambar={p.data.gambar}
-            />
-          ))}
+              <NewsCard
+                slug={p.id}
+                title={p.data.title}
+                date={p.data.date}
+                kategori={p.data.kategori}
+                ringkasan={p.data.ringkasan}
+                gambar={p.data.gambar}
+                fotoUtama={p.data.fotoUtama}
+              />
+            ))}
         </div>
       </div>
     </section>
