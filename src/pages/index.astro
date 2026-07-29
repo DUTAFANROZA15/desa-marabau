@@ -358,13 +358,7 @@ const quickLinks = [
   .q-arrow { position: absolute; top: 22px; right: 22px; color: var(--color-gabah-dark); transition: transform var(--dur) var(--ease); }
   .quick-card:hover .q-arrow { transform: translateX(4px); }
 
- @media (max-width: 560px) {
-    .hero { min-height: 560px; }
-    .hero-in { padding-block: 96px 48px; }
-    .quick-grid { grid-template-columns: 1fr; }
-    .gallery-preview { grid-template-columns: repeat(2, 1fr); }
-  }
-   .sambutan-layout {
+  .sambutan-layout {
     display: grid;
     grid-template-columns: 300px 1fr;
     gap: 56px;
@@ -394,46 +388,8 @@ const quickLinks = [
   .sambutan-text .jabatan { font-size: 0.92rem; font-weight: 700; color: var(--color-gabah-dark); text-transform: uppercase; letter-spacing: 0.04em; margin-top: 2px; }
   .sambutan-text .isi { margin-top: 16px; font-size: 1.05rem; line-height: 1.75; max-width: 68ch; }
 
-  @media (max-width: 860px) {
-    .sambutan-layout { grid-template-columns: 1fr; text-align: center; }
-    .sambutan-photo { margin: 0 auto; width: 220px; height: 220px; }
-    .sambutan-text .isi { max-width: none; }
-  }
-
   .section-head.center { text-align: center; max-width: 640px; margin-inline: auto; }
   .section-head.center .eyebrow::before { display: none; }
-
-  .lokasi-card {
-    display: grid;
-    grid-template-columns: 0.9fr 1.1fr;
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-soft);
-  }
-  .lokasi-info {
-    background: var(--color-forest);
-    color: var(--color-cream);
-    padding: 44px 40px;
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
-  }
-  .lokasi-info h3 { color: var(--color-cream); font-size: 1.5rem; margin-bottom: 0; }
-  .lokasi-info > p { color: rgba(247,243,233,0.82); margin-bottom: 4px; }
-  .lokasi-point { display: flex; gap: 12px; align-items: flex-start; }
-  .lokasi-point :global(svg) { color: var(--color-gabah); flex: none; margin-top: 3px; }
-  .lokasi-point strong { display: block; font-size: 0.94rem; margin-bottom: 2px; }
-  .lokasi-point p { color: rgba(247,243,233,0.78); font-size: 0.88rem; margin: 0; }
-  .lokasi-info .btn { margin-top: 10px; align-self: flex-start; }
-
-  .lokasi-map { min-height: 380px; }
-  .lokasi-map iframe { width: 100%; height: 100%; min-height: 380px; border: 0; display: block; }
-
-  @media (max-width: 860px) {
-    .lokasi-card { grid-template-columns: 1fr; }
-    .lokasi-map { min-height: 280px; }
-    .lokasi-map iframe { min-height: 280px; }
-  }
 
   .lokasi-section .section-head.center {
     text-align: center;
@@ -475,12 +431,6 @@ const quickLinks = [
 
   .lokasi-map { min-height: 420px; }
   .lokasi-map iframe { width: 100%; height: 100%; min-height: 420px; border: 0; display: block; }
-
-  @media (max-width: 860px) {
-    .lokasi-card { grid-template-columns: 1fr; }
-    .lokasi-map { min-height: 280px; }
-    .lokasi-map iframe { min-height: 280px; }
-  }
 
   /* ===== APBDes ===== */
   .apbdes-summary {
@@ -564,12 +514,30 @@ const quickLinks = [
 
   .apbdes-note { font-size: 0.82rem; color: var(--color-ink-soft); text-align: center; margin-top: 8px; }
 
+  /* ===== RESPONSIVE — TABLET & HP ===== */
   @media (max-width: 900px) {
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .news-grid { grid-template-columns: 1fr; }
+    .gallery-preview { grid-template-columns: repeat(3, 1fr); grid-auto-rows: 96px; }
+    .quick-grid { grid-template-columns: 1fr 1fr; }
+    .sambutan-layout { grid-template-columns: 1fr; text-align: center; }
+    .sambutan-photo { margin: 0 auto; width: 220px; height: 288px; }
+    .sambutan-text .isi { max-width: none; }
+    .lokasi-card { grid-template-columns: 1fr; }
+    .lokasi-map { min-height: 280px; }
+    .lokasi-map iframe { min-height: 280px; }
     .apbdes-summary { grid-template-columns: 1fr; }
     .apbdes-tables { grid-template-columns: 1fr; }
     .apbdes-panel { overflow-x: auto; -webkit-overflow-scrolling: touch; }
     .apbdes-table { min-width: 480px; table-layout: fixed; }
     .apbdes-table td, .apbdes-table th { padding: 10px 14px; white-space: nowrap; }
     .apbdes-table td:first-child, .apbdes-table th:first-child { white-space: normal; }
+  }
+
+  @media (max-width: 560px) {
+    .hero { min-height: 560px; }
+    .hero-in { padding-block: 96px 48px; }
+    .quick-grid { grid-template-columns: 1fr; }
+    .gallery-preview { grid-template-columns: repeat(2, 1fr); }
   }
 </style>
