@@ -302,7 +302,13 @@ const quickLinks = [
 </BaseLayout>
 
 <style>
-  .hero { position: relative; overflow: hidden; padding-top: 8px; }
+  .hero {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-end;
+    min-height: 480px;
+  }
   .hero-bg { position: absolute; inset: 0; z-index: 0; overflow: hidden; }
   .hero-bg img {
     position: absolute;
@@ -318,7 +324,7 @@ const quickLinks = [
     position: absolute; inset: 0;
     background: linear-gradient(180deg, rgba(38,64,42,0.15) 0%, rgba(38,64,42,0.55) 65%, var(--color-cream) 100%);
   }
-  .hero-in { position: relative; z-index: 1; padding-block: 120px 160px; max-width: 780px; }
+  .hero-in { position: relative; z-index: 1; padding-block: 120px 64px; max-width: 780px; width: 100%; }
   .hero .eyebrow { color: var(--color-gabah); }
   .hero .eyebrow::before { background: var(--color-gabah); }
   .hero h1 { color: var(--color-white); }
@@ -352,19 +358,12 @@ const quickLinks = [
   .q-arrow { position: absolute; top: 22px; right: 22px; color: var(--color-gabah-dark); transition: transform var(--dur) var(--ease); }
   .quick-card:hover .q-arrow { transform: translateX(4px); }
 
-  @media (max-width: 900px) {
-    .apbdes-summary { grid-template-columns: 1fr; }
-    .apbdes-tables { grid-template-columns: 1fr; }
-    .apbdes-table td, .apbdes-table th { padding: 10px 14px; }
-    .apbdes-panel { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    .apbdes-table { min-width: 480px; }
-  }
-  @media (max-width: 560px) {
-    .hero-in { padding-block: 96px 100px; }
+ @media (max-width: 560px) {
+    .hero { min-height: 560px; }
+    .hero-in { padding-block: 96px 48px; }
     .quick-grid { grid-template-columns: 1fr; }
     .gallery-preview { grid-template-columns: repeat(2, 1fr); }
   }
-
    .sambutan-layout {
     display: grid;
     grid-template-columns: 300px 1fr;
@@ -568,6 +567,9 @@ const quickLinks = [
   @media (max-width: 900px) {
     .apbdes-summary { grid-template-columns: 1fr; }
     .apbdes-tables { grid-template-columns: 1fr; }
-    .apbdes-table td, .apbdes-table th { padding: 10px 14px; }
+    .apbdes-panel { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    .apbdes-table { min-width: 480px; table-layout: fixed; }
+    .apbdes-table td, .apbdes-table th { padding: 10px 14px; white-space: nowrap; }
+    .apbdes-table td:first-child, .apbdes-table th:first-child { white-space: normal; }
   }
 </style>
