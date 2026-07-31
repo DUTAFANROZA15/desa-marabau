@@ -26,6 +26,23 @@ const orbitasi = [
   { tujuan: 'Ibu Kota Provinsi (Padang)', jarak: '58 km', waktu: '± 1,5 jam' },
 ];
 
+const totalRumah = 205;
+const rumah = [
+  { label: 'Rumah Permanen', jumlah: 197, persen: 96.1, warna: 'var(--color-forest)' },
+  { label: 'Semi Permanen', jumlah: 5, persen: 2.4, warna: 'var(--color-sawah)' },
+  { label: 'Non Permanen', jumlah: 3, persen: 1.5, warna: 'var(--color-gabah)' },
+];
+// Dipakai untuk menggambar donut 3 warna secara berurutan
+const rumahGradient = (() => {
+  let acc = 0;
+  const stops = rumah.map((r) => {
+    const start = acc;
+    acc += r.persen;
+    return `${r.warna} ${start}% ${acc}%`;
+  });
+  return stops.join(', ');
+})();
+
 const demografi = [
   { label: 'Laki-laki', jumlah: 584, persen: 50.4 },
   { label: 'Perempuan', jumlah: 574, persen: 49.6 },
@@ -129,6 +146,39 @@ const totalKK = dusunList.reduce((sum, d) => sum + d.data.jumlahKK, 0);
       </table>
     </div>
   </section>
+
+  <!-- KONDISI RUMAH WARGA -->
+  <section class="section alt">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Kondisi Perumahan</p>
+        <h2>Kondisi Rumah Warga</h2>
+      </div>
+      <div class="rumah-grid">
+        <div class="rumah-card card" data-reveal>
+          <h3>Jenis Bangunan Rumah</h3>
+          <div class="rumah-donut" style={`--gradient: ${rumahGradient}`}>
+            <span>{totalRumah}<small>Total Rumah</small></span>
+          </div>
+          <ul class="rumah-legend">
+            {rumah.map((r) => (
+              <li><i style={`background:${r.warna}`}></i> {r.label} — {r.jumlah} unit</li>
+            ))}
+          </ul>
+        </div>
+
+        <div class="rumah-card card" data-reveal>
+          <h3>Rincian Jumlah Rumah</h3>
+          <ul class="rumah-list">
+            <li><span>Total Rumah</span><strong>{totalRumah} unit</strong></li>
+            {rumah.map((r) => (
+              <li><span>{r.label}</span><strong>{r.jumlah} unit <em>({r.persen}%)</em></strong></li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
@@ -168,9 +218,34 @@ const totalKK = dusunList.reduce((sum, d) => sum + d.data.jumlahKK, 0);
   .lahan-label { display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 600; color: var(--color-ink); margin-bottom: 6px; }
   .bar-track { height: 10px; border-radius: 999px; background: var(--color-line); overflow: hidden; }
   .bar-fill { height: 100%; background: linear-gradient(90deg, var(--color-sawah), var(--color-forest)); border-radius: 999px; }
+  .rumah-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .rumah-card { padding: 26px; }
+  .rumah-card h3 { font-size: 1.05rem; margin-bottom: 16px; }
 
-  @media (max-width: 900px) {
+  .rumah-donut {
+    width: 150px; height: 150px; border-radius: 50%; margin: 0 auto 18px;
+    display: grid; place-items: center;
+    background: conic-gradient(var(--gradient));
+  }
+  .rumah-donut span {
+    width: 108px; height: 108px; border-radius: 50%; background: var(--color-white);
+    display: grid; place-items: center; text-align: center;
+    font-family: var(--font-display); font-weight: 650; font-size: 1.3rem; color: var(--color-forest);
+  }
+  .rumah-donut span small { display: block; font-family: var(--font-body); font-weight: 500; font-size: 0.68rem; color: var(--color-ink-soft); margin-top: 2px; }
+
+  .rumah-legend { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; font-size: 0.86rem; }
+  .rumah-legend li { display: flex; align-items: center; gap: 8px; }
+  .rumah-legend i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; flex: none; }
+
+  .rumah-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+  .rumah-list li { display: flex; justify-content: space-between; align-items: baseline; font-size: 0.92rem; border-bottom: 1px dashed var(--color-line); padding-bottom: 10px; }
+  .rumah-list strong { color: var(--color-forest); font-weight: 700; }
+  .rumah-list strong em { font-style: normal; color: var(--color-ink-soft); font-weight: 500; font-size: 0.82rem; }
+
+ @media (max-width: 900px) {
     .batas-grid { grid-template-columns: repeat(2, 1fr); }
     .luas-layout { grid-template-columns: 1fr; }
+    .rumah-grid { grid-template-columns: 1fr; }
   }
 </style>
