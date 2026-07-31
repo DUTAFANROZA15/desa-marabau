@@ -2,15 +2,11 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Icon from '../../components/Icon.astro';
 import KonturDivider from '../../components/KonturDivider.astro';
-import { getCollection } from 'astro:content';
-
-const dusunList = (await getCollection('dusun')).sort((a, b) => a.data.urutan - b.data.urutan);
-
 const batas = [
   { arah: 'Utara', berbatasan: 'Desa Toboh Palabah' },
   { arah: 'Selatan', berbatasan: 'Desa Padang Cakur' },
-  { arah: 'Timur', berbatasan: 'Desa Sungai Kasai' },
   { arah: 'Barat', berbatasan: 'Desa Taluak' },
+  { arah: 'Timur', berbatasan: 'Desa Sungai Kasai' },
 ];
 
 const lahan = [
@@ -32,7 +28,6 @@ const rumah = [
   { label: 'Semi Permanen', jumlah: 5, persen: 2.4, warna: 'var(--color-sawah)' },
   { label: 'Non Permanen', jumlah: 3, persen: 1.5, warna: 'var(--color-gabah)' },
 ];
-// Dipakai untuk menggambar donut 3 warna secara berurutan
 const rumahGradient = (() => {
   let acc = 0;
   const stops = rumah.map((r) => {
@@ -43,20 +38,85 @@ const rumahGradient = (() => {
   return stops.join(', ');
 })();
 
-const demografi = [
-  { label: 'Laki-laki', jumlah: 584, persen: 50.4 },
-  { label: 'Perempuan', jumlah: 574, persen: 49.6 },
-];
+// ===== DATA KEPENDUDUKAN RESMI =====
+// Sumber: Data Agregat Kependudukan Semester II Tahun 2025, Disdukcapil Kota Pariaman,
+// Kelurahan/Desa Marabau (Kode 13.77.03.2011).
+const penduduk = { l: 619, p: 557, total: 1176 };
+const kk = { l: 268, p: 74, total: 342 };
 
-const usia = [
-  { label: '0–14 tahun', persen: 24 },
-  { label: '15–64 tahun', persen: 65 },
-  { label: '65+ tahun', persen: 11 },
-];
+const pendidikan = [
+  { label: 'SLTA/Sederajat', total: 261 },
+  { label: 'Tidak/Belum Sekolah', total: 316 },
+  { label: 'Belum Tamat SD/Sederajat', total: 209 },
+  { label: 'SLTP/Sederajat', total: 179 },
+  { label: 'Tamat SD/Sederajat', total: 178 },
+  { label: 'Diploma IV/Strata I', total: 46 },
+  { label: 'Akademi/Diploma III', total: 11 },
+  { label: 'Strata II', total: 4 },
+  { label: 'Diploma I/II', total: 1 },
+].sort((a, b) => b.total - a.total);
+const totalPendidikan = 1205;
 
-const totalKK = dusunList.reduce((sum, d) => sum + d.data.jumlahKK, 0);
+const usiaGroups = [
+  { label: '0–4', total: 96 }, { label: '5–9', total: 130 }, { label: '10–14', total: 100 },
+  { label: '15–19', total: 115 }, { label: '20–24', total: 110 }, { label: '25–29', total: 97 },
+  { label: '30–34', total: 92 }, { label: '35–39', total: 83 }, { label: '40–44', total: 82 },
+  { label: '45–49', total: 66 }, { label: '50–54', total: 56 }, { label: '55–59', total: 43 },
+  { label: '60–64', total: 45 }, { label: '65–69', total: 39 }, { label: '70–74', total: 20 },
+  { label: '75+', total: 31 },
+];
+const maxUsia = Math.max(...usiaGroups.map((u) => u.total));
+const usia3 = [
+  { label: '0–14 tahun (Anak)', total: 326, persen: 27.1, warna: 'var(--color-gabah)' },
+  { label: '15–64 tahun (Produktif)', total: 789, persen: 65.5, warna: 'var(--color-forest)' },
+  { label: '65+ tahun (Lansia)', total: 90, persen: 7.5, warna: 'var(--color-sawah)' },
+];
+const usia3Gradient = (() => {
+  let acc = 0;
+  return usia3.map((u) => { const start = acc; acc += u.persen; return `${u.warna} ${start}% ${acc}%`; }).join(', ');
+})();
+
+const statusKawin = [
+  { label: 'Belum Kawin', total: 652, persen: 54.1, warna: 'var(--color-sawah)' },
+  { label: 'Kawin', total: 475, persen: 39.4, warna: 'var(--color-forest)' },
+  { label: 'Cerai Mati', total: 52, persen: 4.3, warna: 'var(--color-tanah)' },
+  { label: 'Cerai Hidup', total: 26, persen: 2.2, warna: 'var(--color-gabah)' },
+];
+const statusKawinGradient = (() => {
+  let acc = 0;
+  return statusKawin.map((s) => { const start = acc; acc += s.persen; return `${s.warna} ${start}% ${acc}%`; }).join(', ');
+})();
+
+const pekerjaan = [
+  { label: 'Belum/Tidak Bekerja', total: 312 },
+  { label: 'Pelajar/Mahasiswa', total: 308 },
+  { label: 'Mengurus Rumah Tangga', total: 261 },
+  { label: 'Buruh Harian Lepas', total: 101 },
+  { label: 'Petani/Pekebun', total: 54 },
+  { label: 'Wiraswasta', total: 35 },
+  { label: 'Buruh Tani/Perkebunan', total: 22 },
+  { label: 'Pedagang', total: 18 },
+  { label: 'Nelayan/Perikanan', total: 16 },
+  { label: 'Karyawan Swasta', total: 16 },
+  { label: 'Karyawan Honorer', total: 12 },
+  { label: 'Perdagangan', total: 10 },
+];
+const maxPekerjaan = Math.max(...pekerjaan.map((p) => p.total));
+
+const golonganDarah = [
+  { label: 'Tidak Diketahui', total: 1155 },
+  { label: 'O', total: 26 },
+  { label: 'A', total: 8 },
+  { label: 'B', total: 7 },
+  { label: 'AB', total: 4 },
+  { label: 'O-', total: 3 },
+  { label: 'B+', total: 1 },
+  { label: 'O+', total: 1 },
+];
+const golDarahKetahui = golonganDarah.filter((g) => g.label !== 'Tidak Diketahui');
+const maxGolDarah = Math.max(...golDarahKetahui.map((g) => g.total));
 ---
-<BaseLayout title="Kondisi Desa" description="Batas wilayah, luas wilayah, orbitasi, dan data demografi Desa Marabau.">
+<BaseLayout title="Kondisi Desa" description="Batas wilayah, luas wilayah, orbitasi, dan data kependudukan resmi Desa Marabau.">
   <section class="page-hero photo-hero">
     <div class="hero-bg-photo" aria-hidden="true">
       <img src="/images/kondisi-desa/plang-kantor-desa.jpg" alt="" />
@@ -64,7 +124,7 @@ const totalKK = dusunList.reduce((sum, d) => sum + d.data.jumlahKK, 0);
     <div class="container">
       <p class="eyebrow">Kondisi Desa</p>
       <h1>Wilayah &amp; Kependudukan</h1>
-      <p class="lead">Gambaran batas administratif, penggunaan lahan, jarak tempuh, dan komposisi penduduk Desa Marabau.</p>
+      <p class="lead">Gambaran batas administratif, penggunaan lahan, jarak tempuh, dan data kependudukan resmi Desa Marabau.</p>
     </div>
   </section>
   <KonturDivider tone="cream" flip />
@@ -179,6 +239,150 @@ const totalKK = dusunList.reduce((sum, d) => sum + d.data.jumlahKK, 0);
       </div>
     </div>
   </section>
+
+  <!-- DATA KEPENDUDUKAN RESMI -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Data Kependudukan Resmi</p>
+        <h2>Profil Kependudukan Desa Marabau</h2>
+        <p>Data agregat kependudukan Semester II Tahun 2025 dari Dinas Kependudukan dan Pencatatan Sipil Kota Pariaman.</p>
+      </div>
+
+      <!-- Ringkasan -->
+      <div class="pddk-summary" data-reveal-group>
+        <div class="pddk-stat card" data-reveal>
+          <span class="pddk-label">Jumlah Penduduk</span>
+          <span class="pddk-value">{penduduk.total.toLocaleString('id-ID')}</span>
+          <span class="pddk-sub">{penduduk.l} Laki-laki &middot; {penduduk.p} Perempuan</span>
+        </div>
+        <div class="pddk-stat card" data-reveal>
+          <span class="pddk-label">Jumlah Kepala Keluarga</span>
+          <span class="pddk-value">{kk.total.toLocaleString('id-ID')}</span>
+          <span class="pddk-sub">{kk.l} KK Laki-laki &middot; {kk.p} KK Perempuan</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PENDIDIKAN -->
+  <section class="section alt">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Pendidikan</p>
+        <h2>Tingkat Pendidikan Penduduk</h2>
+      </div>
+      <div class="pddk-bars card" data-reveal>
+        {pendidikan.map((p) => (
+          <div class="pddk-row">
+            <div class="pddk-row-label"><span>{p.label}</span><span>{p.total} jiwa</span></div>
+            <div class="bar-track"><div class="bar-fill" style={`width:${(p.total / totalPendidikan * 100).toFixed(1)}%`}></div></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- USIA -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Struktur Usia</p>
+        <h2>Kelompok Usia Penduduk</h2>
+      </div>
+      <div class="usia-layout">
+        <div class="pddk-bars card usia-bars" data-reveal>
+          {usiaGroups.map((u) => (
+            <div class="pddk-row">
+              <div class="pddk-row-label"><span>{u.label} tahun</span><span>{u.total} jiwa</span></div>
+              <div class="bar-track"><div class="bar-fill gabah" style={`width:${(u.total / maxUsia * 100).toFixed(1)}%`}></div></div>
+            </div>
+          ))}
+        </div>
+        <div class="rumah-card card" data-reveal>
+          <h3>Rasio Usia Produktif</h3>
+          <div class="rumah-donut" style={`--gradient: ${usia3Gradient}`}>
+            <span>{usia3[1].persen}%<small>Usia Produktif</small></span>
+          </div>
+          <ul class="rumah-legend">
+            {usia3.map((u) => (
+              <li><i style={`background:${u.warna}`}></i> {u.label} — {u.total} jiwa</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATUS PERKAWINAN -->
+  <section class="section alt">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Status Perkawinan</p>
+        <h2>Komposisi Status Perkawinan</h2>
+      </div>
+      <div class="rumah-grid">
+        <div class="rumah-card card" data-reveal>
+          <h3>Status Perkawinan</h3>
+          <div class="rumah-donut" style={`--gradient: ${statusKawinGradient}`}>
+            <span>1.205<small>Jiwa Tercatat</small></span>
+          </div>
+          <ul class="rumah-legend">
+            {statusKawin.map((s) => (
+              <li><i style={`background:${s.warna}`}></i> {s.label} — {s.total} jiwa ({s.persen}%)</li>
+            ))}
+          </ul>
+        </div>
+        <div class="rumah-card card" data-reveal>
+          <h3>Rincian Angka</h3>
+          <ul class="rumah-list">
+            {statusKawin.map((s) => (
+              <li><span>{s.label}</span><strong>{s.total} jiwa <em>({s.persen}%)</em></strong></li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PEKERJAAN -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Mata Pencaharian</p>
+        <h2>Pekerjaan Utama Penduduk</h2>
+      </div>
+      <div class="pddk-bars card" data-reveal>
+        {pekerjaan.map((p) => (
+          <div class="pddk-row">
+            <div class="pddk-row-label"><span>{p.label}</span><span>{p.total} jiwa</span></div>
+            <div class="bar-track"><div class="bar-fill sawah" style={`width:${(p.total / maxPekerjaan * 100).toFixed(1)}%`}></div></div>
+          </div>
+        ))}
+      </div>
+      <p class="pddk-note">Menampilkan 12 kategori pekerjaan dengan jumlah terbanyak dari total 28 kategori yang tercatat memiliki data. Rincian lengkap seluruh kategori pekerjaan dapat dilihat di Kantor Desa Marabau.</p>
+    </div>
+  </section>
+
+  <!-- GOLONGAN DARAH -->
+  <section class="section alt">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Golongan Darah</p>
+        <h2>Data Golongan Darah Penduduk</h2>
+      </div>
+      <div class="pddk-bars card" data-reveal>
+        {golDarahKetahui.map((g) => (
+          <div class="pddk-row">
+            <div class="pddk-row-label"><span>Golongan {g.label}</span><span>{g.total} jiwa</span></div>
+            <div class="bar-track"><div class="bar-fill tanah" style={`width:${(g.total / maxGolDarah * 100).toFixed(1)}%`}></div></div>
+          </div>
+        ))}
+      </div>
+      <p class="pddk-note">Sebanyak <strong>1.155 dari 1.205 jiwa (95,9%)</strong> belum memiliki data golongan darah tercatat. Warga yang belum mengetahui golongan darahnya dapat memeriksakan diri di Puskesmas Kecamatan atau saat kegiatan Posyandu.</p>
+      <p class="pddk-source">Sumber: Data Agregat Kependudukan Semester II Tahun 2025, Dinas Kependudukan dan Pencatatan Sipil Kota Pariaman &mdash; Desa Marabau (Kode 13.77.03.2011).</p>
+    </div>
+  </section>
 </BaseLayout>
 
 <style>
@@ -218,6 +422,10 @@ const totalKK = dusunList.reduce((sum, d) => sum + d.data.jumlahKK, 0);
   .lahan-label { display: flex; justify-content: space-between; font-size: 0.88rem; font-weight: 600; color: var(--color-ink); margin-bottom: 6px; }
   .bar-track { height: 10px; border-radius: 999px; background: var(--color-line); overflow: hidden; }
   .bar-fill { height: 100%; background: linear-gradient(90deg, var(--color-sawah), var(--color-forest)); border-radius: 999px; }
+  .bar-fill.gabah { background: linear-gradient(90deg, #E4C77A, var(--color-gabah-dark)); }
+  .bar-fill.sawah { background: linear-gradient(90deg, #A9C48A, var(--color-sawah)); }
+  .bar-fill.tanah { background: linear-gradient(90deg, #B98A63, var(--color-tanah)); }
+
   .rumah-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
   .rumah-card { padding: 26px; }
   .rumah-card h3 { font-size: 1.05rem; margin-bottom: 16px; }
@@ -243,9 +451,31 @@ const totalKK = dusunList.reduce((sum, d) => sum + d.data.jumlahKK, 0);
   .rumah-list strong { color: var(--color-forest); font-weight: 700; }
   .rumah-list strong em { font-style: normal; color: var(--color-ink-soft); font-weight: 500; font-size: 0.82rem; }
 
- @media (max-width: 900px) {
+  /* ===== Data Kependudukan Resmi ===== */
+  .pddk-summary { display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .pddk-stat {
+    padding: 26px 24px; border-top: 4px solid var(--color-gabah);
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .pddk-label { font-size: 0.86rem; color: var(--color-ink-soft); }
+  .pddk-value { font-family: var(--font-display); font-size: 2.1rem; font-weight: 650; color: var(--color-forest); }
+  .pddk-sub { font-size: 0.84rem; color: var(--color-ink-soft); }
+
+  .pddk-bars { padding: 28px 30px; display: flex; flex-direction: column; gap: 16px; }
+  .pddk-row-label { display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600; color: var(--color-ink); margin-bottom: 6px; }
+
+  .usia-layout { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; align-items: start; }
+  .usia-bars { max-height: none; }
+
+  .pddk-note { margin-top: 18px; font-size: 0.86rem; color: var(--color-ink-soft); }
+  .pddk-source { margin-top: 10px; font-size: 0.78rem; color: var(--color-ink-soft); font-style: italic; }
+
+  @media (max-width: 900px) {
     .batas-grid { grid-template-columns: repeat(2, 1fr); }
     .luas-layout { grid-template-columns: 1fr; }
     .rumah-grid { grid-template-columns: 1fr; }
+    .pddk-summary { grid-template-columns: 1fr; }
+    .usia-layout { grid-template-columns: 1fr; }
+    .pddk-bars { padding: 22px 18px; }
   }
 </style>
