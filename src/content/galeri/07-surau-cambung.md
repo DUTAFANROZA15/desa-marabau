@@ -1,5 +1,5 @@
 ---
-judul: "Surau Pulau"
+judul: "Surau Cambung"
 kategori: "Infrastruktur"
 tipe: "foto"
 fotoUtama: "/images/galeri/surau-cambung-3.jpg"
