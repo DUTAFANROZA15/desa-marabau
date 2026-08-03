@@ -1,5 +1,5 @@
 ---
-judul: "Sosialisasi Zero Stunting"
+judul: "Surau Pulau"
 kategori: "Infrastruktur"
 tipe: "foto"
 fotoUtama: "/images/galeri/surau-pulau-3.jpg"
