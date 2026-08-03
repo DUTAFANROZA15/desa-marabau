@@ -18,13 +18,17 @@ function daftarFoto(item: (typeof items)[number]) {
 }
 ---
 <BaseLayout title="Galeri" description="Dokumentasi foto dan video kegiatan, alam, budaya, dan infrastruktur Desa Marabau.">
-  <section class="page-hero">
+  <section class="page-hero photo-hero">
+    <div class="hero-bg-photo" aria-hidden="true">
+      <img src="/images/galeri/galeri.jpg" alt="" />
+    </div>
     <div class="container">
       <p class="eyebrow">Galeri</p>
       <h1>Dokumentasi Desa Marabau</h1>
       <p class="lead">Kumpulan foto dan video kegiatan warga, keindahan alam, dan perkembangan pembangunan desa.</p>
     </div>
   </section>
+
   <KonturDivider tone="cream" flip />
 
   <section class="section">
@@ -79,7 +83,26 @@ function daftarFoto(item: (typeof items)[number]) {
 </div>
 
 <style>
-  .page-hero { padding-block: 64px 40px; }
+ .page-hero { padding-block: 64px 40px; }
+
+  .photo-hero {
+    position: relative;
+    overflow: hidden;
+    padding-block: 100px 64px;
+    isolation: isolate;
+  }
+  .hero-bg-photo { position: absolute; inset: 0; z-index: -1; }
+  .hero-bg-photo img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+  .hero-bg-photo::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(38,64,42,0.55) 0%, rgba(38,64,42,0.78) 60%, var(--color-cream) 100%);
+  }
+  .photo-hero .eyebrow { color: var(--color-gabah); }
+  .photo-hero .eyebrow::before { background: var(--color-gabah); }
+  .photo-hero h1 { color: var(--color-white); }
+  .photo-hero .lead { color: rgba(255,255,255,0.9); }
   .page-hero .lead { max-width: 62ch; font-size: 1.05rem; }
 
   .filter-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 30px; }
